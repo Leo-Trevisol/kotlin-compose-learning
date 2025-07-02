@@ -129,3 +129,85 @@ Tudo unificado em Kotlin puro
 </td>
 </tr>
 </table>
+
+<h3> 2. Criando Primeira UI com Compose</h3>
+
+<p><strong>Exemplo básico:</strong></p>
+
+<pre><code class="language-kotlin">
+@Composable
+fun Saudacao(nome: String) {
+    Text(text = "Olá, $nome!")
+}
+
+@Composable
+fun TelaPrincipal() {
+    Column {
+        Saudacao("Leonardo")
+        Button(onClick = { /* ação */ }) {
+            Text("Clique aqui")
+        }
+    }
+}
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            TelaPrincipal()
+        }
+    }
+}
+</code></pre>
+
+<h3> 3. Visualizar sua UI na IDE</h3>
+
+<p>Adicione um Preview:</p>
+
+<pre><code class="language-kotlin">
+@Preview(showBackground = true)
+@Composable
+fun PreviewTelaPrincipal() {
+    TelaPrincipal()
+}
+</code></pre>
+
+<p>O Android Studio exibirá a prévia da tela diretamente na IDE.</p>
+
+<h3> 4. Comparação Rápida: XML vs Compose</h3>
+
+<table border="1" cellspacing="0" cellpadding="5">
+<tr>
+<th>Modelo Antigo (XML)</th>
+<th>Jetpack Compose</th>
+</tr>
+<tr>
+<td>
+&lt;TextView<br/>
+&nbsp;&nbsp;android:id="@+id/textView"<br/>
+&nbsp;&nbsp;android:text="Olá Mundo"/&gt;
+</td>
+<td>
+@Composable<br/>
+fun Saudacao() {<br/>
+&nbsp;&nbsp;Text(text = "Olá Mundo")<br/>
+}
+</td>
+</tr>
+<tr>
+<td>
+Manipulação via <code>findViewById</code>
+</td>
+<td>
+UI reativa: muda conforme o estado
+</td>
+</tr>
+<tr>
+<td>
+Separação entre XML e código Kotlin
+</td>
+<td>
+Tudo unificado em Kotlin puro
+</td>
+</tr>
+</table>
