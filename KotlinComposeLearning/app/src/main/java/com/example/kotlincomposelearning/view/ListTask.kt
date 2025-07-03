@@ -32,7 +32,7 @@ fun ListTask(navController: NavController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Minhas Tarefas",
+                        text = "My Tasks",
                         fontSize = 22.sp,           // Tamanho do título
                         fontWeight = FontWeight.Bold, // Negrito
                         textAlign = TextAlign.Start  // Alinhamento do texto
