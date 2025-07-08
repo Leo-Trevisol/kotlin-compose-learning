@@ -9,3 +9,9 @@ val ShapeEditText = Shapes(
     medium =  RoundedCornerShape(20.dp),
     large =  RoundedCornerShape(30.dp)
 )
+
+val ShapeCardPriority = Shapes(
+    small = RoundedCornerShape(30.dp),
+    medium =  RoundedCornerShape(50.dp),
+    large =  RoundedCornerShape(100.dp)
+)
