@@ -221,3 +221,91 @@ Button(onClick = { contador++ }) {
   <li>✔️ Pode usar Navegação Compose para trocar de tela.</li>
   <li>✔️ Compose cuida automaticamente das atualizações da interface.</li>
 </ul>
+
+<h2 style="border-left: 5px solid #FFC107; padding-left: 10px; color: #FF6F00;">
+  📋 Exemplo de Tela com Lista e Formulário
+</h2>
+
+<h3>🧩 Organização de Componentes</h3>
+<ul>
+  <li><strong>Scaffold</strong>: estrutura básica com TopBar, FAB e conteúdo.</li>
+  <li><strong>LazyColumn</strong>: lista performática para exibir tarefas.</li>
+  <li><strong>Composable</strong> reutilizáveis: como <code>TaskItem</code>, <code>TextBox</code>, <code>CustomButton</code>.</li>
+  <li><code>remember</code> + <code>mutableStateOf</code>: gerenciamento reativo de estado.</li>
+  <li>Navegação com <code>NavController</code>.</li>
+</ul>
+
+<h3>🖥️ Tela de Listagem (<code>ListTask</code>)</h3>
+<p>Exibe uma lista de tarefas usando <code>LazyColumn</code> com interface organizada em um <code>Scaffold</code>.</p>
+
+<pre><code class="language-kotlin">
+Scaffold(
+    topBar = { TopAppBar(...) },
+    floatingActionButton = { FloatingActionButton(...) }
+) { innerPadding ->
+    LazyColumn(modifier = Modifier.padding(innerPadding)) {
+        itemsIndexed(taskList) { index, _ ->
+            TaskItem(index, taskList)
+        }
+    }
+}
+</code></pre>
+
+<ul>
+  <li>🔹 <strong>TopAppBar</strong>: barra azul com título</li>
+  <li>🔹 <strong>FloatingActionButton</strong>: botão de adicionar tarefa com ícone <code>+</code></li>
+  <li>🔹 <strong>LazyColumn</strong>: lista eficiente para tarefas</li>
+  <li>🔹 <strong>TaskItem</strong>: componente reutilizável para exibir cada item da lista</li>
+</ul>
+
+<h3>📝 Tela de Cadastro de Tarefa (<code>SaveTask</code>)</h3>
+<p>Formulário com campos de texto, seleção de prioridade e botão de salvar.</p>
+
+<pre><code class="language-kotlin">
+var taskTitle by remember { mutableStateOf("") }
+var selectedPriority by remember { mutableStateOf&lt;String?&gt;(null) }
+
+TextBox(value = taskTitle, onValueChange = { taskTitle = it }, label = "Task Title")
+RadioButton(selected = selectedPriority == "low", onClick = { selectedPriority = "low" })
+CustomButton(text = "Save Task", onClick = { navController.navigate("listTasks") })
+</code></pre>
+
+<ul>
+  <li>🔹 <code>remember</code> + <code>mutableStateOf</code>: estados reativos que atualizam a UI</li>
+  <li>🔹 <code>TextBox</code>: campo de texto reutilizável com label</li>
+  <li>🔹 <code>RadioButton</code>: seleção exclusiva entre "low", "medium" e "high"</li>
+  <li>🔹 <code>CustomButton</code>: botão reutilizável com ação personalizada</li>
+  <li>🔹 Navegação para a tela de listagem após o clique no botão</li>
+</ul>
+
+<h3>🌈 Temas e Cores Personalizadas</h3>
+<p>Cores dos <code>RadioButton</code>s são definidas no tema:</p>
+
+<pre><code class="language-kotlin">
+selectedColor = RADIO_BUTTON_GREEN_ENABLED
+unselectedColor = RADIO_BUTTON_GREEN_DISABLED
+</code></pre>
+
+<p>Usar arquivos de <code>Theme.kt</code> para manter o design consistente.</p>
+
+<h3>🧠 Recomposição e Gerenciamento de Estado</h3>
+<p>O Compose atualiza a interface automaticamente quando o estado muda.</p>
+
+<pre><code class="language-kotlin">
+var taskTitle by remember { mutableStateOf("") }
+
+TextField(value = taskTitle, onValueChange = { taskTitle = it })
+</code></pre>
+
+<p>Quando <code>taskTitle</code> muda, apenas os componentes dependentes são redesenhados.</p>
+
+<h3>🔀 Navegação entre Telas</h3>
+<p>Use <code>NavController</code> com rotas nomeadas para navegar:</p>
+
+<pre><code class="language-kotlin">
+navController.navigate("saveTasks")
+</code></pre>
+
+<p>Mapear as rotas usando <code>NavHost</code> em sua MainActivity.</p>
+
+<hr/>
