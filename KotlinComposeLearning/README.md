@@ -1,23 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TasksList - README</title>
-<style>
-  body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; background: #f9f9f9; color: #333; }
-  h1, h2, h3 { color: #0D47A1; }
-  h1 { border-left: 6px solid #1976D2; padding-left: 10px; }
-  h2 { border-left: 4px solid #2196F3; padding-left: 8px; margin-top: 30px; }
-  h3 { margin-top: 20px; }
-  pre { background: #eee; padding: 10px; overflow-x: auto; }
-  code { background: #eee; padding: 2px 5px; border-radius: 3px; }
-  ul { margin-left: 20px; }
-  hr { border: none; border-top: 1px solid #ccc; margin: 30px 0; }
-</style>
-</head>
-<body>
-
 <h1>TasksList - App de Gerenciamento de Tarefas com Kotlin e Jetpack Compose</h1>
 
 <h2>🚀 Descrição</h2>
@@ -124,10 +104,6 @@
   <li>Atualize as dependências no <code>build.gradle</code> conforme necessário.</li>
   <li>Rode o app em um dispositivo físico ou emulador.</li>
 </ol>
-
-<hr />
-
-<hr />
 
 <hr />
 
