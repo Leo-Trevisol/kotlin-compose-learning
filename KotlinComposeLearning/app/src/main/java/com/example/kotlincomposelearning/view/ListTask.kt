@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -18,11 +19,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlincomposelearning.listitem.TaskItem
 import com.example.kotlincomposelearning.model.Task
+import com.example.kotlincomposelearning.repository.TasksRepository
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListTask(navController: NavController) {
+
+    val TasksRepository = TasksRepository() // Instancia o repositório de tarefas
 
     // Scaffold organiza a estrutura básica da tela:
     // inclui TopAppBar, FloatingActionButton e content (conteúdo principal)
@@ -65,41 +69,19 @@ fun ListTask(navController: NavController) {
     ) { innerPadding -> // innerPadding previne que o conteúdo fique por baixo da TopAppBar
 
         // Lista simulada de tarefas
-        val taskList: MutableList<Task> = mutableListOf(
-            Task(
-                task = "Play soccer",
-                description = "dfdsfsdfsdfsdfsdfsdfsdfds",
-                priority = 0
-            ),
-            Task(
-                task = "Go to the movies",
-                description = "dfdsfsdfsdfsdfsdfsdfsdfds",
-                priority = 1
-            ),
-            Task(
-                task = "Go to the college",
-                description = "dfdsfsdfsdfsdfsdfsdfsdfds",
-                priority = 2
-            ),
-            Task(
-                task = "Try on new clothes",
-                description = "dfdsfsdfsdfsdfsdfsdfsdfds",
-                priority = 3
-            )
-        )
+        val taskList = TasksRepository.getTasks().collectAsState(mutableListOf()).value
 
         // LazyColumn: lista otimizada que renderiza itens sob demanda
-        LazyColumn(
+        LazyColumn (
             modifier = Modifier
                 .padding(innerPadding)          // Respeita espaço da AppBar e do FAB
                 .background(Color(0xFFF5F5F5))   // Cor de fundo clara
                 .fillMaxSize()                  // Ocupa todo o espaço disponível
-        ) {
-            // itemsIndexed permite acesso ao índice e item da lista
-            itemsIndexed(taskList) { position, _ ->
-                // Renderiza um item da tarefa (componente personalizado)
-                TaskItem(position, taskList)
-            }
+        ){
+            itemsIndexed(taskList){
+                position, task: Task ->
+                TaskItem(position = position, taskList)
+        }
         }
     }
 }
