@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +28,7 @@ import com.example.kotlincomposelearning.repository.TasksRepository
 fun ListTask(navController: NavController) {
 
     val TasksRepository = TasksRepository() // Instancia o repositório de tarefas
+    val context = LocalContext.current // Obtém o contexto atual da aplicação
 
     // Scaffold organiza a estrutura básica da tela:
     // inclui TopAppBar, FloatingActionButton e content (conteúdo principal)
@@ -80,7 +82,7 @@ fun ListTask(navController: NavController) {
         ){
             itemsIndexed(taskList){
                 position, task: Task ->
-                TaskItem(position = position, taskList)
+                TaskItem(position = position, taskList, context, navController)
         }
         }
     }

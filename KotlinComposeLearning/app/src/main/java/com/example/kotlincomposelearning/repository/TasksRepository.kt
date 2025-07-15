@@ -17,4 +17,8 @@ class TasksRepository() {
 
     fun getTasks() = dataSource.getTasks()
 
+    fun deleteTask(task: String) {
+        dataSource.deleteTask(task)
+    }
+
 }

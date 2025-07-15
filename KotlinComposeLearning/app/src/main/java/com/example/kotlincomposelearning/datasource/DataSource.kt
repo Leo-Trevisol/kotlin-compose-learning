@@ -46,4 +46,15 @@ class DataSource {
         return allTasks
     }
 
+    fun deleteTask(task: String) {
+        db.collection("tasks").document(task).delete()
+            .addOnCompleteListener {
+                // Sucesso na exclusão
+            }
+            .addOnFailureListener { it: Exception ->
+                // Falha ao excluir
+            }
+    }
+
+
 }

@@ -1,145 +1,173 @@
 package com.example.kotlincomposelearning.listitem
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
 import com.example.kotlincomposelearning.R
 import com.example.kotlincomposelearning.model.Task
-import com.example.kotlincomposelearning.ui.theme.RADIO_BUTTON_GREEN_ENABLED
-import com.example.kotlincomposelearning.ui.theme.RADIO_BUTTON_RED_ENABLED
-import com.example.kotlincomposelearning.ui.theme.RADIO_BUTTON_YELLOW_ENABLED
-import com.example.kotlincomposelearning.ui.theme.ShapeCardPriority
+import com.example.kotlincomposelearning.repository.TasksRepository
+import com.example.kotlincomposelearning.ui.theme.*
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskItem(
-    position: Int = 0, // posição do item na lista, usada para pegar a tarefa correta
-    taskList : MutableList<Task> // lista de tarefas de onde será extraído o item a ser exibido
+    position: Int = 0, // posição da tarefa na lista
+    taskList: MutableList<Task>, // lista completa de tarefas
+    context: Context, // contexto Android (necessário para Toast)
+    navController: NavController // para navegar entre telas
 ) {
+    // Recupera os dados da tarefa na posição atual, com valores padrão se nulos
+    val taskTitle = taskList[position].task ?: "Task ${position + 1}"
+    val taskDescription = taskList[position].description ?: "Description"
+    val taskPriority = taskList[position].priority ?: 3
 
-    // Pegando dados da tarefa na posição informada, ou definindo valores padrão caso estejam nulos
-    val taskTitle = taskList[position].task ?: "Task ${position + 1}" // título da tarefa
-    val taskDescription = taskList[position].description ?: "Description" // descrição da tarefa
-    val taskPriority = taskList[position].priority ?: 3 // prioridade da tarefa, padrão 3 (alta)
-
-    // Traduzindo o número da prioridade em texto legível
-    var priorityLevel : String = when (taskPriority) {
-        0 -> "Low priority"      // baixa prioridade
-        1 -> "Medium priority"   // prioridade média
-        2 -> "High priority"     // alta prioridade
-        else -> "High priority"  // qualquer outro valor, considera alta prioridade
+    // Define cor com base na prioridade da tarefa
+    val colorPriority = when (taskPriority) {
+        0 -> RADIO_BUTTON_GREEN_ENABLED
+        1 -> RADIO_BUTTON_YELLOW_ENABLED
+        2 -> RADIO_BUTTON_RED_ENABLED
+        else -> Black
     }
 
-    // Definindo a cor associada à prioridade para uso no indicador visual
-    val colorPriority = when(taskPriority) {
-        0 -> RADIO_BUTTON_GREEN_ENABLED   // verde para baixa prioridade
-        1 -> RADIO_BUTTON_YELLOW_ENABLED  // amarelo para média prioridade
-        2 -> RADIO_BUTTON_RED_ENABLED     // vermelho para alta prioridade
-        else -> Black                     // preto para valores inválidos ou padrão
+    // Converte o valor numérico da prioridade para texto legível
+    val priorityLevel = when (taskPriority) {
+        0 -> "Low priority"
+        1 -> "Medium priority"
+        2 -> "High priority"
+        else -> "High priority"
     }
 
-    // Card container que engloba todo o item da tarefa
+    // Estado para controlar a visibilidade do AlertDialog
+    val openDialog = remember { mutableStateOf(false) }
+
+    // Cria escopo para executar coroutines dentro de um Composable
+    val scope = rememberCoroutineScope()
+
+    // Repositório responsável por manipular tarefas (Firebase ou local)
+    val tasksRepository = TasksRepository()
+
+    // Se o usuário clicar no botão deletar, esse diálogo será mostrado
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false }, // fecha o diálogo se clicar fora
+            title = { Text("Deletar Tarefa") }, // título do diálogo
+            text = { Text("Deseja excluir a tarefa?") }, // mensagem do diálogo
+            confirmButton = {
+                // Botão "Sim" que deleta a tarefa
+                TextButton(onClick = {
+                    // Chama a função do repositório que deleta a tarefa (ex: por ID)
+                    tasksRepository.deleteTask(taskTitle)
+
+                    // Lança uma coroutine para atualizar a UI após deletar
+                    scope.launch {
+                        taskList.removeAt(position) // remove localmente da lista
+                        navController.navigate("listTasks") { // volta pra lista de tarefas
+                            popUpTo("listTasks") { inclusive = true } // limpa a pilha
+                        }
+                        Toast.makeText(context, "Sucesso ao deletar tarefa", Toast.LENGTH_SHORT).show()
+                    }
+
+                    // Fecha o diálogo
+                    openDialog.value = false
+                }) {
+                    Text("Sim")
+                }
+            },
+            dismissButton = {
+                // Botão "Não", apenas fecha o diálogo
+                TextButton(onClick = {
+                    openDialog.value = false
+                }) {
+                    Text("Não")
+                }
+            }
+        )
+    }
+
+    // Card principal que representa visualmente a tarefa
     Card(
-        colors = CardDefaults.cardColors(containerColor = White), // fundo branco para o card
+        colors = CardDefaults.cardColors(containerColor = White), // fundo branco
         modifier = Modifier
-            .fillMaxWidth() // ocupa toda a largura disponível
-            .padding(10.dp) // margem externa de 10dp ao redor do card
+            .fillMaxWidth() // ocupa toda a largura do container
+            .padding(10.dp) // espaço externo
     ) {
-        // Layout com restrições para posicionar os elementos dentro do card
-        ConstraintLayout(
-            modifier = Modifier.padding(20.dp) // padding interno de 20dp para afastar conteúdo das bordas do card
-        ) {
-            // Criando referências para cada elemento a ser posicionado no ConstraintLayout
+        // Layout de restrições (semelhante ao ConstraintLayout do XML)
+        ConstraintLayout(modifier = Modifier.padding(20.dp)) {
+            // Cria referências para os elementos que serão posicionados
             val (txtTitle, txtDescription, priorityCard, txtPriority, btDelete) = createRefs()
 
-            // Texto para o título da tarefa
+            // Texto com o título da tarefa
             Text(
                 text = taskTitle,
                 modifier = Modifier.constrainAs(txtTitle) {
-                    top.linkTo(parent.top, margin = 10.dp)    // posiciona no topo com margem de 10dp
-                    start.linkTo(parent.start, margin = 10.dp) // alinha à esquerda com margem de 10dp
+                    top.linkTo(parent.top, margin = 10.dp)
+                    start.linkTo(parent.start, margin = 10.dp)
                 }
             )
 
-            // Texto para a descrição da tarefa
+            // Texto com a descrição da tarefa
             Text(
                 text = taskDescription,
                 modifier = Modifier.constrainAs(txtDescription) {
-                    top.linkTo(txtTitle.bottom, margin = 10.dp) // abaixo do título com margem de 10dp
-                    start.linkTo(parent.start, margin = 10.dp)   // alinhado à esquerda com margem
+                    top.linkTo(txtTitle.bottom, margin = 10.dp)
+                    start.linkTo(parent.start, margin = 10.dp)
                 }
             )
 
-            // Texto para o nível de prioridade da tarefa
+            // Texto com o nível da prioridade (baixa, média ou alta)
             Text(
                 text = priorityLevel,
                 modifier = Modifier.constrainAs(txtPriority) {
-                    top.linkTo(txtDescription.bottom, margin = 10.dp) // abaixo da descrição
-                    start.linkTo(parent.start, margin = 10.dp)      // alinhado à esquerda
-                    bottom.linkTo(parent.bottom, margin = 10.dp)    // alinhado ao fundo com margem
+                    top.linkTo(txtDescription.bottom, margin = 10.dp)
+                    start.linkTo(parent.start, margin = 10.dp)
+                    bottom.linkTo(parent.bottom, margin = 10.dp)
                 }
             )
 
-            // Card pequeno colorido que indica visualmente a prioridade da tarefa
+            // Pequeno card colorido que serve como indicador visual da prioridade
             Card(
                 modifier = Modifier
-                    .size(30.dp) // tamanho fixo 30x30 dp
+                    .size(30.dp) // tamanho quadrado 30x30dp
                     .constrainAs(priorityCard) {
-                        top.linkTo(txtDescription.bottom, margin = 10.dp)     // abaixo da descrição
-                        start.linkTo(txtPriority.end, margin = 10.dp)     // ao lado direito do texto da prioridade
-                        bottom.linkTo(parent.bottom, margin = 10.dp)        // alinhado ao fundo
+                        top.linkTo(txtDescription.bottom, margin = 10.dp)
+                        start.linkTo(txtPriority.end, margin = 10.dp)
+                        bottom.linkTo(parent.bottom, margin = 10.dp)
                     },
-                shape = ShapeCardPriority.large,                          // forma customizada para bordas
-                colors = CardDefaults.cardColors(containerColor = colorPriority) // cor de fundo conforme prioridade
-            ) {
-                // Conteúdo opcional do card - vazio neste caso
-            }
+                shape = ShapeCardPriority.large, // forma arredondada customizada
+                colors = CardDefaults.cardColors(containerColor = colorPriority) // cor definida acima
+            ) {}
 
-            // Botão com ícone para deletar a tarefa
+            // Botão com ícone de lixeira para deletar a tarefa
             IconButton(
                 onClick = {
-                    // Ação ao clicar no botão, por exemplo, deletar a tarefa da lista
+                    openDialog.value = true // abre o diálogo de confirmação
                 },
                 modifier = Modifier.constrainAs(btDelete) {
-                    top.linkTo(txtDescription.bottom, margin = 10.dp)           // alinhado verticalmente com a prioridade
-                    start.linkTo(priorityCard.end, margin = 30.dp)          // após o card colorido com distância maior
-                    end.linkTo(parent.end, margin = 10.dp)                     // alinhado ao final do container com margem
-                    bottom.linkTo(parent.bottom, margin = 10.dp)               // alinhado ao fundo com margem
+                    top.linkTo(txtDescription.bottom, margin = 10.dp)
+                    start.linkTo(priorityCard.end, margin = 30.dp)
+                    end.linkTo(parent.end, margin = 10.dp)
+                    bottom.linkTo(parent.bottom, margin = 10.dp)
                 }
             ) {
-                // Ícone do botão (imagem vetor)
                 Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete), // ícone delete
-                    contentDescription = null // descrição para acessibilidade (aqui omitida)
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete),
+                    contentDescription = "Deletar" // descrição para acessibilidade
                 )
             }
         }
     }
-}
-
-@Preview(showBackground = true) // permite visualizar no preview do Android Studio
-@Composable
-fun TaskItemPreview() {
-    val mockTasks = mutableListOf(
-        Task(
-            task = "Buy some milk",                    // título de exemplo
-            description = "Go to the market to buy milk", // descrição de exemplo
-            priority = 2                               // prioridade alta para exemplo
-        )
-    )
-
-    TaskItem(position = 0, taskList = mockTasks) // chama o composable com os dados mockados
 }
