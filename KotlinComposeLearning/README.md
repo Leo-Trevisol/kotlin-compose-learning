@@ -29,7 +29,7 @@
       <li><code>FloatingActionButton</code> (FAB) para navegar à tela de cadastro</li>
     </ul>
   </li>
-  <li>Cada item da lista é renderizado pelo componente <code>TaskItem</code>, que mostra título, descrição, prioridade colorida e botão de deletar (função futura).</li>
+  <li>Cada item da lista é renderizado pelo componente <code>TaskItem</code>.</li>
 </ul>
 
 <h3>3. Tela de Cadastro/Salvar Tarefa - <code>SaveTask.kt</code></h3>
@@ -43,26 +43,42 @@
   </li>
   <li>Botão personalizado <code>CustomButton</code> para salvar a tarefa.</li>
   <li>Valida o título e, ao salvar, persiste os dados via <code>TasksRepository</code>.</li>
-  <li>Feedback via Toast e retorno para a lista após salvar.</li>
+  <li>Feedback via Toast e retorno automático para a tela de listagem.</li>
 </ul>
 
 <h3>4. Componente Reutilizável - <code>TaskItem.kt</code></h3>
 <ul>
-  <li>Representa cada tarefa na lista.</li>
+  <li>Representa cada tarefa visualmente como um <code>Card</code> estilizado.</li>
   <li>Exibe:
     <ul>
       <li>Título e descrição da tarefa</li>
-      <li>Indicador colorido da prioridade (verde, amarelo, vermelho)</li>
-      <li>Texto do nível de prioridade</li>
-      <li>Botão de deletar (com ícone), pronto para implementar ação futura.</li>
+      <li>Indicador visual de prioridade com cor (verde, amarelo ou vermelho)</li>
+      <li>Texto indicando o nível de prioridade (baixa, média ou alta)</li>
+      <li>Ícone de lixeira para deletar</li>
+    </ul>
+  </li>
+  <li>Ao clicar no botão de deletar:
+    <ul>
+      <li>Abre um <code>AlertDialog</code> pedindo confirmação.</li>
+      <li>Se confirmado, chama o <code>deleteTask()</code> do repositório.</li>
+      <li>Remove a tarefa da lista atual na UI com <code>taskList.removeAt(position)</code>.</li>
+      <li>Usa <code>CoroutineScope</code> com <code>launch</code> para realizar ações assíncronas.</li>
+      <li>Mostra <code>Toast</code> indicando sucesso.</li>
+      <li>Redireciona para a rota <code>"listTasks"</code> e limpa a pilha de navegação.</li>
     </ul>
   </li>
 </ul>
 
-<h3>5. Componentes Auxiliares</h3>
+<h3>5. Diálogo de Confirmação com AlertDialog</h3>
 <ul>
-  <li><strong><code>CustomButton</code></strong>: Botão estilizado para o app, com cor azul e texto branco.</li>
-  <li><strong><code>TextBox</code></strong>: Campo de texto customizado baseado em <code>OutlinedTextField</code> com cores e estilos consistentes.</li>
+  <li>Implementado com <code>AlertDialog</code> do Compose Material3.</li>
+  <li>É exibido usando <code>remember { mutableStateOf(false) }</code> para controle do estado.</li>
+  <li>Contém dois botões:
+    <ul>
+      <li><strong>Sim</strong>: confirma a exclusão e executa a remoção com feedback.</li>
+      <li><strong>Não</strong>: apenas fecha o diálogo.</li>
+    </ul>
+  </li>
 </ul>
 
 <h3>6. Modelo de Dados - <code>Task.kt</code></h3>
@@ -78,8 +94,16 @@
 
 <h3>7. Camada de Persistência</h3>
 <ul>
-  <li><strong><code>TasksRepository</code></strong>: Responsável por salvar as tarefas, serve de camada intermediária entre a UI e a fonte de dados.</li>
-  <li><strong><code>DataSource</code></strong>: Implementa a comunicação com o <strong>Firebase Firestore</strong>, salvando as tarefas na coleção <code>"tasks"</code>.</li>
+  <li><strong><code>TasksRepository</code></strong>: Camada intermediária entre a UI e a fonte de dados. Encapsula chamadas de leitura e gravação.</li>
+  <li><strong><code>DataSource</code></strong>:
+    <ul>
+      <li>Gerencia comunicação com o <strong>Firebase Firestore</strong>.</li>
+      <li><code>saveTask()</code>: salva tarefa na coleção <code>"tasks"</code>.</li>
+      <li><code>getTasks()</code>: retorna um <code>Flow</code> reativo da lista de tarefas.</li>
+      <li><code>deleteTask()</code>: exclui a tarefa com base no ID (título) no Firestore.</li>
+      <li>Utiliza <code>StateFlow</code> para permitir que a UI observe alterações em tempo real.</li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -90,8 +114,8 @@
   <li>Jetpack Compose (Material3)</li>
   <li>Navigation Compose</li>
   <li>Firebase Firestore</li>
-  <li>Coroutines para operações assíncronas</li>
-  <li>Arquitetura simples com separação entre UI, repositório e fonte de dados</li>
+  <li>Coroutines e Flow</li>
+  <li>Arquitetura com separação entre UI, Repositório e DataSource</li>
 </ul>
 
 <hr />
@@ -108,7 +132,5 @@
 <hr />
 
 <h2>📝 Conclusão</h2>
-<p>Este app serve como uma ótima base para quem deseja aprender a usar Kotlin com Jetpack Compose em conjunto com Firebase Firestore, mostrando boas práticas de navegação, componentes reutilizáveis, gerenciamento de estado e arquitetura simples, porém funcional.</p>
-
-</body>
-</html>
+<p>Este app serve como uma excelente base para quem deseja aprender a desenvolver apps modernos com Kotlin + Jetpack Compose, incluindo manipulação de estado, persistência em nuvem com Firebase Firestore, navegação declarativa e componentes reutilizáveis.</p>
+<p>Com a funcionalidade de exclusão de tarefas e confirmação via <code>AlertDialog</code>, a aplicação se aproxima ainda mais de um ambiente de produção real.</p>
