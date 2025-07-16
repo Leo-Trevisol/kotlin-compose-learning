@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">NewAppCompose</string>
+    <string name="app_name">Project27ComposePlane</string>
+    <string name="subtitle_splash">Find an easy way to buy plane tickets with just a few clicks in the app</string>
+    <string name="dahboard_title">Let\'s explore the world \n with us!!!</string>
 </resources>
