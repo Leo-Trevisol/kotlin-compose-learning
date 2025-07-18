@@ -37,7 +37,7 @@ class SplashActivity : ComponentActivity() {
     }
 }
 
-@Composable 
+@Composable
 @Preview
 fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
     StatusTopBarColor()
