@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
@@ -96,64 +99,91 @@ fun PassengerSelector(
                     .background(color = colorResource(id = R.color.lightPurple), shape = RoundedCornerShape(8.dp))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
-                Button(
+                IconButton(
                     onClick = { if (adultCount > 0) onAdultCountChange(adultCount - 1) },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.lightPurple)),
-                    shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.padding(end = 4.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_minus), // Replace with your minus icon resource
-                        contentDescription = "Decrease Adults"
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_minus),
+                        contentDescription = "Diminuir Adultos",
+                        tint = colorResource(id = R.color.orange),
+                        modifier = Modifier.size(16.dp)
                     )
                 }
-                Text(text = "Adultos ", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.White)
-                Text(text = "$adultCount", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.White)
-                Button(
+
+                Text(
+                    text = "Adultos ",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+                Text(
+                    text = "$adultCount",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+
+                IconButton(
                     onClick = { onAdultCountChange(adultCount + 1) },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.lightPurple)),
                     modifier = Modifier.padding(start = 4.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_plus), // Replace with your plus icon resource
-                        contentDescription = "Increase Adults"
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = "Aumentar Adultos",
+                        tint = colorResource(id = R.color.orange),
+                        modifier = Modifier.size(16.dp)
                     )
                 }
             }
             Spacer(modifier = Modifier.width(8.dp))
             // Child Selector
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .weight(1f)
-                    .background(color = colorResource(id = R.color.lightPurple), shape = RoundedCornerShape(8.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Button(
-                    onClick = { if (childCount > 0) onChildCountChange(childCount - 1) },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.lightPurple)),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.padding(end = 4.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_minus), // Replace with your minus icon resource
-                        contentDescription = "Decrease Children"
-                    )
-                }
-                Text(text = "Crianças ", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.White)
-                Text(text = "$childCount", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.White)
-                Button(
-                    onClick = { onChildCountChange(childCount + 1) },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.lightPurple)),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.padding(start = 4.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_plus), // Replace with your plus icon resource
-                        contentDescription = "Increase Children"
-                    )
-                }
-            }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(color = colorResource(id = R.color.lightPurple), shape = RoundedCornerShape(8.dp))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        IconButton(
+                            onClick = { if (childCount > 0) onChildCountChange(childCount - 1) },
+                            modifier = Modifier.padding(end = 4.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_minus),
+                                contentDescription = "Diminuir Crianças",
+                                tint = colorResource(id = R.color.orange),
+                                modifier = Modifier.size(16.dp) // tamanho fixo do ícone
+                            )
+                        }
+
+                        Text(
+                            text = "Crianças ",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = Color.White
+                        )
+                        Text(
+                            text = "$childCount",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = Color.White
+                        )
+
+                        IconButton(
+                            onClick = { onChildCountChange(childCount + 1) },
+                            modifier = Modifier.padding(start = 4.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_plus),
+                                contentDescription = "Aumentar Crianças",
+                                tint = colorResource(id = R.color.orange),
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+
         }
     }
 }
@@ -213,7 +243,7 @@ fun MainScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colorResource(id = R.color.purple_200))
+                .background(colorResource(id = R.color.lightPurple))
                 .padding(paddingValues)
         ) {
             item {
@@ -235,6 +265,7 @@ fun MainScreen() {
                         items = locations.map { it.Name },
                         loadingIcon = painterResource(id = R.drawable.ic_airplane),
                         hint = "Selecione a partida",
+                        iconTint = colorResource(id = R.color.orange),
                         showLocationLoading = showLocationLoading,
                         onItemSelected = { selected ->
                             from = selected
@@ -246,6 +277,7 @@ fun MainScreen() {
                         items = locations.map { it.Name },
                         loadingIcon = painterResource(id = R.drawable.ic_airplane),
                         hint = "Selecione o destino",
+                        iconTint = colorResource(id = R.color.orange),
                         showLocationLoading = showLocationLoading,
                         onItemSelected = { selected ->
                             to = selected
@@ -271,18 +303,32 @@ fun MainScreen() {
                                 onClick = { showDepartureDatePicker = true },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colorResource(id = R.color.lightPurple),
-                                    contentColor = Color.Black
+                                    contentColor = Color.White
                                 ),
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(8.dp)
                             ) {
-                                Text(
-                                    text = if (departureDate.isEmpty()) "Selecionar data" else departureDate,
-                                    color = Color.Black,
-                                    fontSize = 14.sp
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = if (departureDate.isEmpty()) "Selecionar" else departureDate,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_calendar), // seu ícone de calendário
+                                        contentDescription = "Ícone de calendário",
+                                        tint = colorResource(id = R.color.orange),
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                         }
+
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             YellowTitle(text = "Data de retorno")
@@ -290,18 +336,32 @@ fun MainScreen() {
                                 onClick = { showReturnDatePicker = true },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colorResource(id = R.color.lightPurple),
-                                    contentColor = Color.Black
+                                    contentColor = Color.White
                                 ),
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(8.dp)
                             ) {
-                                Text(
-                                    text = if (returnDate.isEmpty()) "Selecionar data" else returnDate,
-                                    color = Color.Black,
-                                    fontSize = 14.sp
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = if (returnDate.isEmpty()) "Selecionar" else returnDate,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_calendar), // seu ícone de calendário
+                                        contentDescription = "Ícone de calendário",
+                                        tint = colorResource(id = R.color.orange),
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                         }
+
                     }
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -310,6 +370,7 @@ fun MainScreen() {
                         items = listOf("Classe Econômica", "Classe Executiva", "Primeira Classe"),
                         loadingIcon = painterResource(id = R.drawable.ic_bell),
                         hint = "Selecione a Classe",
+                        iconTint = colorResource(id = R.color.orange),
                         showLocationLoading = false,
                         onItemSelected = { selected ->
                             classes = selected

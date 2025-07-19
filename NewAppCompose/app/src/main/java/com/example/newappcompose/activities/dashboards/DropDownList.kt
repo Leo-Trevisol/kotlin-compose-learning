@@ -41,24 +41,22 @@ fun DropDownList(
     loadingIcon: Any,
     hint: String,
     showLocationLoading: Boolean,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (String) -> Unit,
+    iconTint: Color? = null // cor opcional
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf(hint) } // Inicializa e mantém o hint como valor padrão até seleção
+    var selectedItem by remember { mutableStateOf(hint) }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it }
-    ) {
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
         OutlinedTextField(
-            value = selectedItem, // Usa o selectedItem diretamente, mantendo o hint até seleção
+            value = selectedItem,
             onValueChange = { selectedItem = it },
             readOnly = true,
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(size = 10.dp))
-                .background(color = colorResource(id = R.color.lightPurple))
+                .clip(RoundedCornerShape(10.dp))
+                .background(colorResource(id = R.color.lightPurple))
                 .menuAnchor(),
             placeholder = {
                 Text(
@@ -69,10 +67,18 @@ fun DropDownList(
                 )
             },
             leadingIcon = {
-                Image(
-                    painter = loadingIcon as? Painter ?: painterResource(id = R.drawable.ic_user),
-                    contentDescription = null
-                )
+                if (iconTint != null) {
+                    Image(
+                        painter = loadingIcon as? Painter ?: painterResource(id = R.drawable.ic_user),
+                        contentDescription = null,
+                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(iconTint)
+                    )
+                } else {
+                    Image(
+                        painter = loadingIcon as? Painter ?: painterResource(id = R.drawable.ic_user),
+                        contentDescription = null
+                    )
+                }
             },
             textStyle = TextStyle(
                 color = Color.White,

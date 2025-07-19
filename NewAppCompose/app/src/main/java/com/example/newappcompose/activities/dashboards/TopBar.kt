@@ -63,15 +63,15 @@ fun TopBar() {
                 }
         )
 
-        Text( // Saudação com nome do usuário
-            text = "Olá Leonardo!", // Texto de saudação
-            color = Color.White,  // Cor branca
-            fontWeight = FontWeight.Bold, // Negrito
-            fontSize = 18.sp, // Tamanho da fonte
-            modifier = Modifier.constrainAs(ref = name) { // Posicionamento
-                top.linkTo(parent.top)        // Topo alinhado com pai
-                start.linkTo(profile.end)     // Início após o perfil
-                bottom.linkTo(parent.bottom)  // Base alinhada com pai
+        Text(
+            text = "Olá Leonardo!",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            modifier = Modifier.constrainAs(ref = name) {
+                top.linkTo(parent.top)
+                start.linkTo(profile.end, margin = 8.dp) // margem start de 8.dp
+                bottom.linkTo(parent.bottom)
             }
         )
 
