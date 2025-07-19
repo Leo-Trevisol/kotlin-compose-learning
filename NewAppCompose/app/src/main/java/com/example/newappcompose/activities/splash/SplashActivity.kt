@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newappcompose.MainActivity
 import com.example.newappcompose.R
+import com.example.newappcompose.activities.dashboards.DashboardActivity
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class SplashActivity : ComponentActivity() {
@@ -31,7 +32,7 @@ class SplashActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SplashScreen(onGetStartedClick = {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, DashboardActivity::class.java))
             })
         }
     }

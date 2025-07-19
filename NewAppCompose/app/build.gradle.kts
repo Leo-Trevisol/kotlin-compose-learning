@@ -71,6 +71,7 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.33.2-alpha")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation ("androidx.compose.material3:material3")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
