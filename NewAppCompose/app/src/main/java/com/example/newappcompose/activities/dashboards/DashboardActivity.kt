@@ -3,6 +3,7 @@ package com.example.newappcompose.activities.dashboards
 
 import android.content.Intent // Para navegação entre telas
 import android.os.Bundle // Para manipular dados do ciclo de vida da Activity
+import android.widget.Toast
 import androidx.activity.ComponentActivity // Classe base para activities com Jetpack Compose
 import androidx.activity.compose.setContent // Define o conteúdo da activity usando Compose
 import androidx.activity.enableEdgeToEdge // Permite que o conteúdo ocupe a tela toda
@@ -379,6 +380,38 @@ fun MainScreen() {
 
                     GradientButton(
                         onClick = {
+
+                            // Validação
+                            if (from.isEmpty() || to.isEmpty()) {
+                                Toast.makeText(context, "Selecione origem e destino.", Toast.LENGTH_SHORT).show()
+                                return@GradientButton
+                            }
+
+                            if (from == to) {
+                                Toast.makeText(context, "Origem e destino não podem ser iguais.", Toast.LENGTH_SHORT).show()
+                                return@GradientButton
+                            }
+
+                            if (adultPassenger < 1) {
+                                Toast.makeText(context, "É necessário pelo menos 1 adulto.", Toast.LENGTH_SHORT).show()
+                                return@GradientButton
+                            }
+
+                            if (departureDate.isEmpty()) {
+                                Toast.makeText(context, "Selecione a data de partida.", Toast.LENGTH_SHORT).show()
+                                return@GradientButton
+                            }
+
+                            if (returnDate.isEmpty()) {
+                                Toast.makeText(context, "Selecione a data de retorno.", Toast.LENGTH_SHORT).show()
+                                return@GradientButton
+                            }
+
+                            if (classes.isEmpty()) {
+                                Toast.makeText(context, "Selecione a classe desejada.", Toast.LENGTH_SHORT).show()
+                                return@GradientButton
+                            }
+
                             viewModel.loadFiltered(from, to).observeForever { result ->
                                 flights = result // Atualiza lista de voos
                                 val intent =
@@ -469,4 +502,5 @@ fun MainScreen() {
         }
     }
 }
+
 
