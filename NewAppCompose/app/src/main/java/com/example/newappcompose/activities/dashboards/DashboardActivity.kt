@@ -1,116 +1,103 @@
+// Importações necessárias para o funcionamento da tela e dos componentes Compose
 package com.example.newappcompose.activities.dashboards
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.newappcompose.R
-import com.example.newappcompose.activities.search.SearchResultActivity
-import com.example.newappcompose.domain.FlightModel
-import com.example.newappcompose.domain.LocationModel
-import com.example.newappcompose.viewmodel.MainViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import android.content.Intent // Para navegação entre telas
+import android.os.Bundle // Para manipular dados do ciclo de vida da Activity
+import androidx.activity.ComponentActivity // Classe base para activities com Jetpack Compose
+import androidx.activity.compose.setContent // Define o conteúdo da activity usando Compose
+import androidx.activity.enableEdgeToEdge // Permite que o conteúdo ocupe a tela toda
+import androidx.compose.foundation.Image // Componente para exibir imagens
+import androidx.compose.foundation.background // Permite aplicar cor de fundo
+import androidx.compose.foundation.layout.* // Componentes de layout como Column, Row, Spacer
+import androidx.compose.foundation.lazy.LazyColumn // Lista otimizada para muitos itens
+import androidx.compose.foundation.shape.RoundedCornerShape // Define cantos arredondados
+import androidx.compose.material3.* // Componentes de Material 3 como Button, Text, etc
+import androidx.compose.runtime.* // Gerenciamento de estado e efeitos colaterais
+import androidx.compose.ui.Alignment // Alinhamento de componentes
+import androidx.compose.ui.Modifier // Modificador usado para configurar UI
+import androidx.compose.ui.graphics.Color // Cores
+import androidx.compose.ui.res.colorResource // Acessa cor do resources (colors.xml)
+import androidx.compose.ui.res.painterResource // Acessa drawable como recurso
+import androidx.compose.ui.text.font.FontWeight // Peso da fonte (negrito, etc)
+import androidx.compose.ui.unit.dp // Define valores de dimensões (padding, size, etc)
+import androidx.compose.ui.unit.sp // Define valores de tamanho de fonte
+import androidx.compose.ui.platform.LocalContext // Contexto da activity atual
+import androidx.compose.ui.tooling.preview.Preview // Permite visualizar o Composable no preview
+import com.example.newappcompose.R // Acessa recursos como drawables, strings, cores
+import com.example.newappcompose.activities.search.SearchResultActivity // Tela de resultado de busca
+import com.example.newappcompose.domain.FlightModel // Modelo de voo
+import com.example.newappcompose.domain.LocationModel // Modelo de localidade
+import com.example.newappcompose.viewmodel.MainViewModel // ViewModel principal
+import java.text.SimpleDateFormat // Para formatação de data
+import java.util.Date // Para trabalhar com datas
+import java.util.Locale // Para definição de localização da data
 
+// Activity principal do dashboard
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        super.onCreate(savedInstanceState) // Chama a função da superclasse
+        enableEdgeToEdge() // Usa o espaço total da tela
         setContent {
-            MainScreen()
+            MainScreen() // Define o conteúdo como a tela principal
         }
     }
 }
 
+// Composable reutilizável para título amarelo
 @Composable
 fun YellowTitle(text: String, modifier: Modifier = Modifier) {
     Text(
-        text = text,
-        fontWeight = FontWeight.SemiBold,
-        color = colorResource(id = R.color.lightPurple),
-        modifier = modifier
+        text = text, // Define o texto
+        fontWeight = FontWeight.SemiBold, // Define o peso da fonte
+        color = colorResource(id = R.color.lightPurple), // Define a cor do texto
+        modifier = modifier // Modificador customizável
     )
 }
 
+// Componente que permite selecionar quantidade de passageiros adultos e crianças
 @Composable
 fun PassengerSelector(
-    adultCount: Int,
-    childCount: Int,
-    onAdultCountChange: (Int) -> Unit,
-    onChildCountChange: (Int) -> Unit
+    adultCount: Int, // Quantidade de adultos
+    childCount: Int, // Quantidade de crianças
+    onAdultCountChange: (Int) -> Unit, // Callback para alteração de adultos
+    onChildCountChange: (Int) -> Unit // Callback para alteração de crianças
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)
+            .fillMaxWidth() // Ocupa largura máxima
+            .padding(top = 8.dp) // Espaçamento superior
     ) {
-        Text(text = "Passageiros", fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
+        Text(
+            text = "Passageiros", // Título da seção
+            fontWeight = FontWeight.Bold, // Negrito
+            modifier = Modifier.padding(bottom = 8.dp) // Espaçamento inferior
+        )
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            verticalAlignment = Alignment.CenterVertically, // Alinha verticalmente ao centro
+            modifier = Modifier.fillMaxWidth() // Ocupa largura total
         ) {
-            // Adult Selector
+            // Seletor de adultos
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .weight(1f)
-                    .background(color = colorResource(id = R.color.lightPurple), shape = RoundedCornerShape(8.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .weight(1f) // Ocupa metade da largura disponível
+                    .background(
+                        color = colorResource(id = R.color.lightPurple),
+                        shape = RoundedCornerShape(8.dp)
+                    ) // Fundo roxo com cantos arredondados
+                    .padding(horizontal = 8.dp, vertical = 4.dp) // Padding interno
             ) {
                 IconButton(
-                    onClick = { if (adultCount > 0) onAdultCountChange(adultCount - 1) },
-                    modifier = Modifier.padding(end = 4.dp)
+                    onClick = { if (adultCount > 0) onAdultCountChange(adultCount - 1) }, // Diminui adultos se maior que 0
+                    modifier = Modifier.padding(end = 4.dp) // Espaço à direita
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_minus),
-                        contentDescription = "Diminuir Adultos",
-                        tint = colorResource(id = R.color.orange),
-                        modifier = Modifier.size(16.dp)
+                        painter = painterResource(id = R.drawable.ic_minus), // Ícone de menos
+                        contentDescription = "Diminuir Adultos", // Descrição para acessibilidade
+                        tint = colorResource(id = R.color.orange), // Cor laranja
+                        modifier = Modifier.size(16.dp) // Tamanho do ícone
                     )
                 }
-
                 Text(
                     text = "Adultos ",
                     fontWeight = FontWeight.Bold,
@@ -123,156 +110,164 @@ fun PassengerSelector(
                     fontSize = 14.sp,
                     color = Color.White
                 )
-
                 IconButton(
-                    onClick = { onAdultCountChange(adultCount + 1) },
+                    onClick = { onAdultCountChange(adultCount + 1) }, // Aumenta número de adultos
+                    modifier = Modifier.padding(start = 4.dp) // Espaço à esquerda
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_plus), // Ícone de mais
+                        contentDescription = "Aumentar Adultos", // Descrição acessível
+                        tint = colorResource(id = R.color.orange), // Cor do ícone
+                        modifier = Modifier.size(16.dp) // Tamanho do ícone
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(8.dp)) // Espaço entre adulto e criança
+
+            // Seletor de crianças
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .weight(1f) // Ocupa metade da largura
+                    .background(
+                        color = colorResource(id = R.color.lightPurple),
+                        shape = RoundedCornerShape(8.dp)
+                    ) // Fundo roxo com cantos arredondados
+                    .padding(horizontal = 8.dp, vertical = 4.dp) // Espaçamento interno
+            ) {
+                IconButton(
+                    onClick = { if (childCount > 0) onChildCountChange(childCount - 1) }, // Diminui número de crianças
+                    modifier = Modifier.padding(end = 4.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_minus), // Ícone de menos
+                        contentDescription = "Diminuir Crianças", // Descrição acessível
+                        tint = colorResource(id = R.color.orange), // Cor do ícone
+                        modifier = Modifier.size(16.dp) // Tamanho fixo do ícone
+                    )
+                }
+                Text(
+                    text = "Crianças ",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+                Text(
+                    text = "$childCount",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+                IconButton(
+                    onClick = { onChildCountChange(childCount + 1) }, // Aumenta número de crianças
                     modifier = Modifier.padding(start = 4.dp)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = "Aumentar Adultos",
+                        contentDescription = "Aumentar Crianças",
                         tint = colorResource(id = R.color.orange),
                         modifier = Modifier.size(16.dp)
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
-            // Child Selector
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(color = colorResource(id = R.color.lightPurple), shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        IconButton(
-                            onClick = { if (childCount > 0) onChildCountChange(childCount - 1) },
-                            modifier = Modifier.padding(end = 4.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_minus),
-                                contentDescription = "Diminuir Crianças",
-                                tint = colorResource(id = R.color.orange),
-                                modifier = Modifier.size(16.dp) // tamanho fixo do ícone
-                            )
-                        }
-
-                        Text(
-                            text = "Crianças ",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = Color.White
-                        )
-                        Text(
-                            text = "$childCount",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = Color.White
-                        )
-
-                        IconButton(
-                            onClick = { onChildCountChange(childCount + 1) },
-                            modifier = Modifier.padding(start = 4.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_plus),
-                                contentDescription = "Aumentar Crianças",
-                                tint = colorResource(id = R.color.orange),
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
+@OptIn(ExperimentalMaterial3Api::class) // Indica que estamos usando APIs experimentais do Material3
+@Composable // Indica que esta função é um componente de UI
 fun MainScreen() {
-    val locations = remember { mutableStateListOf<LocationModel>() }
-    val viewModel = MainViewModel()
-    var showLocationLoading by remember { mutableStateOf(true) }
 
-    var from by remember { mutableStateOf("") }
-    var to by remember { mutableStateOf("") }
-    var adultPassenger by remember { mutableStateOf(1) }
-    var childPassenger by remember { mutableStateOf(0) }
-    var departureDate by remember { mutableStateOf("") }
-    var returnDate by remember { mutableStateOf("") }
-    var classes by remember { mutableStateOf("") }
-    var showDepartureDatePicker by remember { mutableStateOf(false) }
-    var showReturnDatePicker by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    var flights by remember { mutableStateOf<List<FlightModel>>(emptyList()) }
+    val locations =
+        remember { mutableStateListOf<LocationModel>() } // Lista reativa com as localidades disponíveis
+    val viewModel = MainViewModel() // ViewModel que carrega os dados da tela
+    var showLocationLoading by remember { mutableStateOf(true) } // Indica se os locais ainda estão sendo carregados
 
-    // Carrega as localizações do Firebase
+    var from by remember { mutableStateOf("") } // Local de origem selecionado
+    var to by remember { mutableStateOf("") } // Local de destino selecionado
+    var adultPassenger by remember { mutableStateOf(1) } // Número de adultos
+    var childPassenger by remember { mutableStateOf(0) } // Número de crianças
+    var departureDate by remember { mutableStateOf("") } // Data de partida
+    var returnDate by remember { mutableStateOf("") } // Data de retorno
+    var classes by remember { mutableStateOf("") } // Classe selecionada
+    var showDepartureDatePicker by remember { mutableStateOf(false) } // Exibe seletor de data de partida
+    var showReturnDatePicker by remember { mutableStateOf(false) } // Exibe seletor de data de retorno
+    val context = LocalContext.current // Obtém o contexto atual da Activity
+    var flights by remember { mutableStateOf<List<FlightModel>>(emptyList()) } // Lista de voos encontrados
+
     LaunchedEffect(Unit) {
         viewModel.loadLocations().observeForever { result ->
-            locations.clear()
-            locations.addAll(result)
-            showLocationLoading = false
+            locations.clear() // Limpa lista atual
+            locations.addAll(result) // Adiciona as localizações recebidas
+            showLocationLoading = false // Finaliza loading
             if (locations.isNotEmpty()) {
-                from = locations[0].Name
-                to = if (locations.size > 1) locations[1].Name ?: "" else ""
+                from = locations[0].Name // Define o local de partida padrão
+                to = if (locations.size > 1) locations[1].Name
+                    ?: "" else "" // Define o destino padrão
             }
         }
     }
+    val departureDatePickerState = rememberDatePickerState() // Estado do seletor de data de partida
+    val returnDatePickerState = rememberDatePickerState() // Estado do seletor de data de retorno
 
-    // Estado para os DatePickers
-    val departureDatePickerState = rememberDatePickerState()
-    val returnDatePickerState = rememberDatePickerState()
+    val dateFormatter = remember {
+        SimpleDateFormat(
+            "dd/MM/yyyy",
+            Locale.getDefault()
+        )
+    } // Formata datas no padrão BR
 
-    // Formata a data selecionada
-    val dateFormatter = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
     LaunchedEffect(departureDatePickerState.selectedDateMillis) {
         departureDatePickerState.selectedDateMillis?.let {
-            departureDate = dateFormatter.format(Date(it))
+            departureDate = dateFormatter.format(Date(it)) // Atualiza a string da data de partida
         }
     }
+
     LaunchedEffect(returnDatePickerState.selectedDateMillis) {
         returnDatePickerState.selectedDateMillis?.let {
-            returnDate = dateFormatter.format(Date(it))
+            returnDate = dateFormatter.format(Date(it)) // Atualiza a string da data de retorno
         }
     }
 
     Scaffold(
-        bottomBar = { MyBottomBar() }
+        bottomBar = { MyBottomBar() } // Define uma barra inferior
     ) { paddingValues ->
+
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.lightPurple))
-                .padding(paddingValues)
+                .fillMaxSize() // Ocupa toda a tela
+                .background(colorResource(id = R.color.lightPurple)) // Cor de fundo roxa
+                .padding(paddingValues) // Adiciona padding interno do Scaffold
         ) {
+
             item {
-                TopBar()
+                TopBar() // Componente de topo da tela
             }
+
             item {
                 Column(
                     modifier = Modifier
-                        .padding(all = 16.dp)
+                        .padding(all = 16.dp) // Padding externo
                         .background(
-                            color = colorResource(id = R.color.white),
-                            shape = RoundedCornerShape(16.dp)
+                            color = colorResource(id = R.color.white), // Fundo branco
+                            shape = RoundedCornerShape(16.dp) // Cantos arredondados
                         )
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                        .fillMaxWidth() // Ocupa largura total
+                        .padding(16.dp) // Padding interno
                 ) {
-                    // From Dropdown
+
                     DropDownList(
-                        items = locations.map { it.Name },
-                        loadingIcon = painterResource(id = R.drawable.ic_airplane),
-                        hint = "Selecione a partida",
-                        iconTint = colorResource(id = R.color.orange),
-                        showLocationLoading = showLocationLoading,
+                        items = locations.map { it.Name }, // Lista de nomes de localidades
+                        loadingIcon = painterResource(id = R.drawable.ic_airplane), // Ícone de avião
+                        hint = "Selecione a partida", // Texto placeholder
+                        iconTint = colorResource(id = R.color.orange), // Cor do ícone
+                        showLocationLoading = showLocationLoading, // Mostra spinner se estiver carregando
                         onItemSelected = { selected ->
-                            from = selected
+                            from = selected // Atualiza a origem
                         }
                     )
 
-                    // To Dropdown
                     DropDownList(
                         items = locations.map { it.Name },
                         loadingIcon = painterResource(id = R.drawable.ic_airplane),
@@ -280,47 +275,46 @@ fun MainScreen() {
                         iconTint = colorResource(id = R.color.orange),
                         showLocationLoading = showLocationLoading,
                         onItemSelected = { selected ->
-                            to = selected
+                            to = selected // Atualiza destino
                         }
                     )
 
-                    // Passengers
                     PassengerSelector(
-                        adultCount = adultPassenger,
-                        childCount = childPassenger,
-                        onAdultCountChange = { adultPassenger = it },
+                        adultCount = adultPassenger, // Passa o número atual de adultos
+                        childCount = childPassenger, // Passa o número atual de crianças
+                        onAdultCountChange = { adultPassenger = it }, // Atualiza estado
                         onChildCountChange = { childPassenger = it }
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
 
-                    // Dates
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    Spacer(modifier = Modifier.height(8.dp)) // Espaço vertical
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+
                         Column(modifier = Modifier.weight(1f)) {
-                            YellowTitle(text = "Data de partida")
+                            YellowTitle(text = "Data de partida") // Título da seção
                             Button(
-                                onClick = { showDepartureDatePicker = true },
+                                onClick = { showDepartureDatePicker = true }, // Abre o DatePicker
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colorResource(id = R.color.lightPurple),
                                     contentColor = Color.White
                                 ),
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(8.dp)
+                                modifier = Modifier.fillMaxWidth(), // Ocupa largura total
+                                shape = RoundedCornerShape(8.dp) // Cantos arredondados
                             ) {
+
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text(
-                                        text = if (departureDate.isEmpty()) "Selecionar" else departureDate,
+                                        text = if (departureDate.isEmpty()) "Selecionar" else departureDate, // Mostra data ou "Selecionar"
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.White,
-                                        modifier = Modifier.weight(1f)
+                                        modifier = Modifier.weight(1f) // Ocupa espaço restante
                                     )
                                     Icon(
-                                        painter = painterResource(id = R.drawable.ic_calendar), // seu ícone de calendário
+                                        painter = painterResource(id = R.drawable.ic_calendar),
                                         contentDescription = "Ícone de calendário",
                                         tint = colorResource(id = R.color.orange),
                                         modifier = Modifier.size(20.dp)
@@ -329,7 +323,8 @@ fun MainScreen() {
                             }
                         }
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(8.dp)) // Espaço entre colunas
+
                         Column(modifier = Modifier.weight(1f)) {
                             YellowTitle(text = "Data de retorno")
                             Button(
@@ -353,7 +348,7 @@ fun MainScreen() {
                                         modifier = Modifier.weight(1f)
                                     )
                                     Icon(
-                                        painter = painterResource(id = R.drawable.ic_calendar), // seu ícone de calendário
+                                        painter = painterResource(id = R.drawable.ic_calendar),
                                         contentDescription = "Ícone de calendário",
                                         tint = colorResource(id = R.color.orange),
                                         modifier = Modifier.size(20.dp)
@@ -361,94 +356,117 @@ fun MainScreen() {
                                 }
                             }
                         }
-
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
 
-                    // Class Dropdown
+                    Spacer(modifier = Modifier.height(8.dp)) // Espaçamento inferior
+
                     DropDownList(
-                        items = listOf("Classe Econômica", "Classe Executiva", "Primeira Classe"),
-                        loadingIcon = painterResource(id = R.drawable.ic_bell),
+                        items = listOf(
+                            "Classe Econômica",
+                            "Classe Executiva",
+                            "Primeira Classe"
+                        ), // Opções de classe
+                        loadingIcon = painterResource(id = R.drawable.ic_bell), // Ícone decorativo
                         hint = "Selecione a Classe",
                         iconTint = colorResource(id = R.color.orange),
                         showLocationLoading = false,
                         onItemSelected = { selected ->
-                            classes = selected
+                            classes = selected // Atualiza a classe selecionada
                         }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
 
-                    // Procurar Button
+                    Spacer(modifier = Modifier.height(16.dp)) // Espaçamento antes do botão
+
                     GradientButton(
                         onClick = {
                             viewModel.loadFiltered(from, to).observeForever { result ->
-                                flights = result
-                                val intent = Intent(context, SearchResultActivity::class.java).apply {
-                                    putExtra("from", from)
-                                    putExtra("to", to)
-                                    putExtra("numPassenger", adultPassenger + childPassenger)
-                                    putExtra("departureDate", departureDate)
-                                    putExtra("returnDate", returnDate)
-                                    putExtra("class", classes)
-                                    putExtra("flights", ArrayList(flights))
-                                    putExtra("fromShort", locations.find { it.Name == from }?.let { it.Id.toString() } ?: "")
-                                    putExtra("toShort", locations.find { it.Name == to }?.let { it.Id.toString() } ?: "")
-                                }
-                                context.startActivity(intent)
+                                flights = result // Atualiza lista de voos
+                                val intent =
+                                    Intent(context, SearchResultActivity::class.java).apply {
+                                        putExtra("from", from)
+                                        putExtra("to", to)
+                                        putExtra("numPassenger", adultPassenger + childPassenger)
+                                        putExtra("departureDate", departureDate)
+                                        putExtra("returnDate", returnDate)
+                                        putExtra("class", classes)
+                                        putExtra("flights", ArrayList(flights))
+                                        putExtra(
+                                            "fromShort",
+                                            locations.find { it.Name == from }
+                                                ?.let { it.Id.toString() } ?: "")
+                                        putExtra(
+                                            "toShort",
+                                            locations.find { it.Name == to }
+                                                ?.let { it.Id.toString() } ?: "")
+                                    }
+                                context.startActivity(intent) // Navega para a próxima tela
                             }
                         },
-                        text = "Procurar"
+                        text = "Procurar" // Texto do botão
                     )
                 }
             }
         }
 
-        // DatePicker para Data de Partida
+        // Verifica se o seletor de data de partida deve ser exibido
         if (showDepartureDatePicker) {
             DatePickerDialog(
+                // Ação ao clicar fora do diálogo ou pressionar "voltar"
                 onDismissRequest = { showDepartureDatePicker = false },
+                // Botão de confirmação
                 confirmButton = {
-                    Button(onClick = {
-                        showDepartureDatePicker = false
-                    }) {
-                        Text("Confirmar")
+                    Button(
+                        onClick = {
+                            showDepartureDatePicker = false // Fecha o diálogo ao confirmar
+                        }
+                    ) {
+                        Text("Confirmar") // Texto exibido no botão de confirmação
                     }
                 },
+                // Botão de cancelamento
                 dismissButton = {
-                    Button(onClick = { showDepartureDatePicker = false }) {
-                        Text("Cancelar")
+                    Button(
+                        onClick = {
+                            showDepartureDatePicker = false // Fecha o diálogo ao cancelar
+                        }
+                    ) {
+                        Text("Cancelar") // Texto exibido no botão de cancelamento
                     }
                 }
             ) {
-                DatePicker(state = departureDatePickerState)
+                DatePicker(state = departureDatePickerState) // Componente de seleção de data, vinculado ao estado da data de partida
             }
         }
 
-        // DatePicker para Data de Retorno
+        // Verifica se o seletor de data de retorno deve ser exibido
         if (showReturnDatePicker) {
             DatePickerDialog(
+                // Ação ao clicar fora do diálogo ou pressionar "voltar"
                 onDismissRequest = { showReturnDatePicker = false },
+                // Botão de confirmação
                 confirmButton = {
-                    Button(onClick = {
-                        showReturnDatePicker = false
-                    }) {
-                        Text("Confirmar")
+                    Button(
+                        onClick = {
+                            showReturnDatePicker = false // Fecha o diálogo ao confirmar
+                        }
+                    ) {
+                        Text("Confirmar") // Texto exibido no botão de confirmação
                     }
                 },
+                // Botão de cancelamento
                 dismissButton = {
-                    Button(onClick = { showReturnDatePicker = false }) {
-                        Text("Cancelar")
+                    Button(
+                        onClick = {
+                            showReturnDatePicker = false // Fecha o diálogo ao cancelar
+                        }
+                    ) {
+                        Text("Cancelar") // Texto exibido no botão de cancelamento
                     }
                 }
             ) {
-                DatePicker(state = returnDatePickerState)
+                DatePicker(state = returnDatePickerState) // Componente de seleção de data, vinculado ao estado da data de retorno
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    MainScreen()
-}

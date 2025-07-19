@@ -1,5 +1,7 @@
+// Pacote onde o arquivo está localizado
 package com.example.newappcompose.activities.dashboards
 
+// Importações necessárias para composições e elementos da UI
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -34,31 +36,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newappcompose.R
 
+// Permite o uso de APIs experimentais do Material 3
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownList(
-    items: List<String>,
-    loadingIcon: Any,
-    hint: String,
-    showLocationLoading: Boolean,
-    onItemSelected: (String) -> Unit,
-    iconTint: Color? = null // cor opcional
+    items: List<String>,                // Lista de opções para o menu suspenso
+    loadingIcon: Any,                  // Ícone mostrado à esquerda do campo de texto
+    hint: String,                      // Texto exibido como dica (placeholder)
+    showLocationLoading: Boolean,     // Indica se o indicador de carregamento deve ser mostrado
+    onItemSelected: (String) -> Unit, // Callback chamado ao selecionar um item
+    iconTint: Color? = null           // Cor opcional do ícone
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf(hint) }
+    var expanded by remember { mutableStateOf(false) }           // Controla se o menu suspenso está expandido
+    var selectedItem by remember { mutableStateOf(hint) }        // Armazena o item atualmente selecionado
 
+    // Container do menu suspenso
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
+
+        // Campo de texto com borda para exibir o item selecionado
         OutlinedTextField(
-            value = selectedItem,
-            onValueChange = { selectedItem = it },
-            readOnly = true,
+            value = selectedItem,                     // Valor exibido no campo
+            onValueChange = { selectedItem = it },    // Atualiza valor (embora esteja em modo somente leitura)
+            readOnly = true,                          // Impede digitação direta
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .background(colorResource(id = R.color.lightPurple))
-                .menuAnchor(),
-            placeholder = {
+                .clip(RoundedCornerShape(10.dp))                             // Borda arredondada
+                .background(colorResource(id = R.color.lightPurple))        // Fundo lilás
+                .menuAnchor(),                                              // Âncora do menu suspenso
+            placeholder = { // Dica quando o campo está vazio
                 Text(
                     text = hint,
                     color = Color.White.copy(alpha = 0.7f),
@@ -66,26 +72,28 @@ fun DropDownList(
                     fontWeight = FontWeight.Bold
                 )
             },
-            leadingIcon = {
+            leadingIcon = { // Ícone à esquerda do campo
                 if (iconTint != null) {
+                    // Se houver cor definida, aplica o filtro de cor
                     Image(
                         painter = loadingIcon as? Painter ?: painterResource(id = R.drawable.ic_user),
                         contentDescription = null,
                         colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(iconTint)
                     )
                 } else {
+                    // Caso contrário, exibe o ícone sem cor
                     Image(
                         painter = loadingIcon as? Painter ?: painterResource(id = R.drawable.ic_user),
                         contentDescription = null
                     )
                 }
             },
-            textStyle = TextStyle(
+            textStyle = TextStyle( // Estilo do texto no campo
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             ),
-            colors = OutlinedTextFieldDefaults.colors(
+            colors = OutlinedTextFieldDefaults.colors( // Cores personalizadas do campo
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
                 focusedTextColor = Color.White,
@@ -93,6 +101,7 @@ fun DropDownList(
             )
         )
 
+        // Exibe indicador de carregamento se necessário
         if (showLocationLoading) {
             Box(
                 modifier = Modifier
@@ -105,12 +114,13 @@ fun DropDownList(
                     .height(55.dp),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator() // Spinner de carregamento
             }
         } else {
+            // Exibe o menu suspenso com as opções
             ExposedDropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false } // Fecha ao clicar fora
             ) {
                 items.forEach { item ->
                     DropdownMenuItem(
@@ -125,9 +135,9 @@ fun DropDownList(
                             }
                         },
                         onClick = {
-                            selectedItem = item
-                            expanded = false
-                            onItemSelected(item)
+                            selectedItem = item      // Define item selecionado
+                            expanded = false         // Fecha o menu
+                            onItemSelected(item)     // Dispara o callback
                         }
                     )
                 }
@@ -136,14 +146,15 @@ fun DropDownList(
     }
 }
 
+// Função para exibir um preview do componente no Android Studio
 @Preview(showBackground = true)
 @Composable
 fun DropDownListPreview() {
     DropDownList(
-        items = listOf("NewYork", "Los Angeles"),
-        loadingIcon = painterResource(id = R.drawable.ic_airplane),
-        hint = "Selecione a partida",
-        showLocationLoading = false,
-        onItemSelected = {}
+        items = listOf("NewYork", "Los Angeles"),                         // Lista de exemplo
+        loadingIcon = painterResource(id = R.drawable.ic_airplane),      // Ícone exemplo
+        hint = "Selecione a partida",                                    // Dica inicial
+        showLocationLoading = false,                                     // Sem carregamento
+        onItemSelected = {}                                              // Nenhuma ação no preview
     )
 }
