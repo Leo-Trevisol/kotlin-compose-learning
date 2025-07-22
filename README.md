@@ -1,46 +1,67 @@
-<h1>📱 kotlin-compose-learning</h1>
+<h1 align="center">📱 kotlin-compose-learning</h1>
 
-<p>Repositório para estudos e experimentos com <strong>Kotlin</strong> e <strong>Jetpack Compose</strong>, explorando:</p>
+<p align="center">
+  Repositório dedicado a experimentos e estudos com <strong>Kotlin</strong> e <strong>Jetpack Compose</strong>.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-1.9.x-blue?logo=kotlin"/>
+  <img src="https://img.shields.io/badge/Jetpack%20Compose-Material3-orange?logo=android"/>
+  <img src="https://img.shields.io/badge/Android%20Studio-Giraffe-green?logo=android"/>
+</p>
+
+<hr/>
+
+<h2>🚀 Sobre o Projeto</h2>
+
+<p>Este projeto é voltado para aprendizado prático de Jetpack Compose e seus principais conceitos, como:</p>
 <ul>
-  <li>Construção de interfaces declarativas</li>
-  <li>Gerenciamento de estado reativo</li>
-  <li>Navegação entre telas</li>
-  <li>Criação de componentes reutilizáveis</li>
+  <li>✅ Construção de interfaces declarativas</li>
+  <li>✅ Gerenciamento de estado reativo</li>
+  <li>✅ Navegação entre telas com rotas nomeadas</li>
+  <li>✅ Criação de componentes reutilizáveis</li>
+  <li>✅ Uso de <code>Modifier</code> para personalização visual</li>
+  <li>✅ Composição de layouts com Material Design 3</li>
 </ul>
 
 <hr/>
 
 <h2>🧱 O que é Jetpack Compose?</h2>
+
 <p>
-  Jetpack Compose é o moderno toolkit da Google para criar interfaces no Android de forma
-  <strong>100% declarativa com Kotlin</strong> — sem XML.
-  Ele substitui o modelo tradicional baseado em <code>View</code> e <code>findViewById</code>.
+  Jetpack Compose é o toolkit moderno do Android para construção de interfaces de forma
+  <strong>100% declarativa em Kotlin</strong> — eliminando a necessidade de XML e <code>findViewById</code>.
 </p>
+
+<ul>
+  <li>Código mais conciso e expressivo</li>
+  <li>Gerenciamento simples de navegação e estado</li>
+  <li>Alta reutilização e preview de componentes</li>
+  <li>Total integração com ViewModel, LiveData e Flow</li>
+</ul>
 
 <hr/>
 
-<h2>🛠️ Criando um Projeto com Jetpack Compose</h2>
+<h2>🛠️ Como Criar um Projeto Compose</h2>
 
-<h3>Projeto Novo</h3>
+<h3>✅ Novo Projeto</h3>
 <ol>
-  <li>Abra o <strong>Android Studio</strong></li>
-  <li>Clique em <strong>New Project → Empty Compose Activity</strong></li>
-  <li>Configure nome e pacote</li>
-  <li>O projeto já estará pronto para usar Compose</li>
+  <li>Abrir o <strong>Android Studio</strong></li>
+  <li>Selecionar <strong>New Project → Empty Compose Activity</strong></li>
+  <li>Configurar nome, pacote e versão do SDK</li>
+  <li>Pronto! Compose já estará habilitado</li>
 </ol>
 
-<h3>Projeto Existente</h3>
+<h3>🛠️ Projeto Existente</h3>
 
 <pre><code>
-// build.gradle (nível do app)
+// build.gradle (módulo app)
 android {
-    ...
     buildFeatures {
-        compose true
+        compose = true
     }
-
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.4'
+        kotlinCompilerExtensionVersion = '1.5.4'
     }
 }
 
@@ -54,7 +75,7 @@ dependencies {
 
 <hr/>
 
-<h2>✨ Primeira Interface com Compose</h2>
+<h2>✨ Exemplo Simples de Composable</h2>
 
 <pre><code>
 @Composable
@@ -62,26 +83,16 @@ fun Saudacao(nome: String) {
     Text(text = "Olá, $nome!")
 }
 
+@Preview
 @Composable
-fun TelaPrincipal() {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Saudacao("Leonardo")
-        Button(onClick = { /* ação */ }) {
-            Text("Clique aqui")
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTelaPrincipal() {
-    TelaPrincipal()
+fun PreviewSaudacao() {
+    Saudacao("Leonardo")
 }
 </code></pre>
 
 <hr/>
 
-<h2>🔄 Gerenciamento de Estado Reativo</h2>
+<h2>🧠 Gerenciamento de Estado</h2>
 
 <pre><code>
 @Composable
@@ -94,95 +105,76 @@ fun Contador() {
 }
 </code></pre>
 
-<p>
-  Mudanças no estado (como <code>contador++</code>) fazem o Compose redesenhar apenas o necessário.
-</p>
-
 <hr/>
 
-<h2>⚖️ Comparativo: XML vs Jetpack Compose</h2>
+<h2>⚖️ Comparativo XML vs Jetpack Compose</h2>
 
 <table border="1" cellspacing="0" cellpadding="6">
-  <tr>
-    <th>XML Tradicional</th>
-    <th>Jetpack Compose</th>
-  </tr>
-  <tr>
-    <td><code>&lt;TextView android:text="Olá Mundo"/&gt;</code></td>
-    <td><code>Text("Olá Mundo")</code></td>
-  </tr>
-  <tr>
-    <td><code>findViewById&lt;Button&gt;(R.id.btn)</code></td>
-    <td><code>Button(onClick = { })</code></td>
-  </tr>
-  <tr>
-    <td>Separação entre XML e código</td>
-    <td>Kotlin puro, 100% integrado</td>
-  </tr>
-  <tr>
-    <td>Gerenciamento manual de ciclo de vida</td>
-    <td>Recomposição automática</td>
-  </tr>
+  <thead>
+    <tr>
+      <th>XML Tradicional</th>
+      <th>Jetpack Compose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&lt;TextView android:text="Olá Mundo"/&gt;</td>
+      <td><code>Text("Olá Mundo")</code></td>
+    </tr>
+    <tr>
+      <td><code>findViewById&lt;Button&gt;(R.id.btn)</code></td>
+      <td><code>Button(onClick = { })</code></td>
+    </tr>
+    <tr>
+      <td>Separação entre XML e lógica</td>
+      <td>Kotlin puro, unificado</td>
+    </tr>
+    <tr>
+      <td>Gerenciamento manual de ciclo de vida</td>
+      <td>Recomposição automática</td>
+    </tr>
+    <tr>
+      <td>Layouts XML (LinearLayout, RelativeLayout)</td>
+      <td><code>Column</code>, <code>Row</code>, <code>Box</code></td>
+    </tr>
+  </tbody>
 </table>
 
 <hr/>
 
-<h2>🧩 Componentes Comuns do Compose</h2>
-
-<table border="1" cellspacing="0" cellpadding="6">
-  <tr>
-    <th>Componente</th>
-    <th>Uso</th>
-  </tr>
-  <tr>
-    <td><code>Text</code></td>
-    <td>Exibe texto</td>
-  </tr>
-  <tr>
-    <td><code>Button</code></td>
-    <td>Botão clicável</td>
-  </tr>
-  <tr>
-    <td><code>Column</code> / <code>Row</code></td>
-    <td>Layout vertical / horizontal</td>
-  </tr>
-  <tr>
-    <td><code>LazyColumn</code></td>
-    <td>Lista performática (como RecyclerView)</td>
-  </tr>
-  <tr>
-    <td><code>Box</code></td>
-    <td>Sobreposição de elementos</td>
-  </tr>
-  <tr>
-    <td><code>Scaffold</code></td>
-    <td>Layout padrão com TopBar, FAB e conteúdo</td>
-  </tr>
-  <tr>
-    <td><code>Modifier</code></td>
-    <td>Estilo, padding, clique, etc</td>
-  </tr>
-</table>
-
-<hr/>
-
-<h2>🚀 Funcionamento da MainActivity</h2>
+<h2>🔧 Uso de Modifier</h2>
 
 <pre><code>
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            TelaPrincipal()
-        }
-    }
-}
+Text(
+    text = "Texto de exemplo",
+    modifier = Modifier
+        .padding(16.dp)
+        .background(Color.LightGray)
+        .fillMaxWidth()
+        .clickable { println("Clicou!") }
+)
 </code></pre>
 
 <ul>
-  <li><strong>ComponentActivity</strong>: base ideal para Compose</li>
-  <li><strong>setContent {}</strong>: define a interface da tela sem XML</li>
+  <li><code>padding</code>: espaçamento interno</li>
+  <li><code>background</code>: cor de fundo</li>
+  <li><code>fillMaxWidth</code>: ocupa toda a largura disponível</li>
+  <li><code>clickable</code>: torna clicável</li>
 </ul>
+
+<hr/>
+
+<h2>🧩 Componentes Comuns</h2>
+
+<table border="1" cellspacing="0" cellpadding="6">
+  <tr><th>Componente</th><th>Descrição</th></tr>
+  <tr><td><code>Text</code></td><td>Exibe texto</td></tr>
+  <tr><td><code>Button</code></td><td>Botão clicável</td></tr>
+  <tr><td><code>TextField</code></td><td>Campo de entrada de texto</td></tr>
+  <tr><td><code>LazyColumn</code></td><td>Lista otimizada (RecyclerView)</td></tr>
+  <tr><td><code>Scaffold</code></td><td>Layout com TopBar, FAB, etc</td></tr>
+  <tr><td><code>Box</code>, <code>Column</code>, <code>Row</code></td><td>Layouts flexíveis</td></tr>
+</table>
 
 <hr/>
 
@@ -191,60 +183,12 @@ class MainActivity : ComponentActivity() {
 <pre><code>
 val navController = rememberNavController()
 
-NavHost(navController, startDestination = "listTasks") {
-    composable("listTasks") { ListTask(navController) }
-    composable("saveTasks") { SaveTask(navController) }
+NavHost(navController, startDestination = "home") {
+    composable("home") { HomeScreen(navController) }
+    composable("detalhe") { DetalheScreen(navController) }
 }
 
-// Navegar para outra tela
-navController.navigate("saveTasks")
-</code></pre>
-
-<hr/>
-
-<h2>🧠 Recomposição Inteligente</h2>
-
-<pre><code>
-var titulo by remember { mutableStateOf("") }
-
-TextField(value = titulo, onValueChange = { titulo = it })
-</code></pre>
-
-<p>Quando o valor de <code>titulo</code> muda, o Compose redesenha apenas os componentes afetados.</p>
-
-<hr/>
-
-<h2>📋 Exemplo: Lista e Formulário</h2>
-
-<h3>📄 Tela de Listagem</h3>
-
-<pre><code>
-Scaffold(
-    topBar = { TopAppBar(title = { Text("Minhas Tarefas") }) },
-    floatingActionButton = {
-        FloatingActionButton(onClick = { /* navegar */ }) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
-        }
-    }
-) { innerPadding ->
-    LazyColumn(modifier = Modifier.padding(innerPadding)) {
-        items(taskList) { task ->
-            TaskItem(task)
-        }
-    }
-}
-</code></pre>
-
-<h3>📝 Tela de Cadastro</h3>
-
-<pre><code>
-var titulo by remember { mutableStateOf("") }
-
-TextField(value = titulo, onValueChange = { titulo = it })
-RadioButton(selected = prioridade == "Alta", onClick = { prioridade = "Alta" })
-Button(onClick = { navController.navigate("listTasks") }) {
-    Text("Salvar")
-}
+navController.navigate("detalhe")
 </code></pre>
 
 <hr/>
@@ -264,14 +208,67 @@ MaterialTheme(
 
 <hr/>
 
-<h2>✅ Resumo Final</h2>
+<h2>📋 Exemplo: Lista de Tarefas</h2>
+
+<h3>📄 Listagem</h3>
+
+<pre><code>
+Scaffold(
+    topBar = { TopAppBar(title = { Text("Minhas Tarefas") }) },
+    floatingActionButton = {
+        FloatingActionButton(onClick = { navController.navigate("novaTarefa") }) {
+            Icon(Icons.Default.Add, contentDescription = "Adicionar")
+        }
+    }
+) {
+    LazyColumn {
+        items(tarefas) { tarefa ->
+            Text(tarefa.titulo)
+        }
+    }
+}
+</code></pre>
+
+<h3>📝 Cadastro</h3>
+
+<pre><code>
+var titulo by remember { mutableStateOf("") }
+
+TextField(value = titulo, onValueChange = { titulo = it })
+RadioButton(selected = prioridade == "Alta", onClick = { prioridade = "Alta" })
+Button(onClick = { navController.navigate("listaTarefas") }) {
+    Text("Salvar")
+}
+</code></pre>
+
+<hr/>
+
+<h2>💡 Boas Práticas</h2>
 
 <ul>
-  <li>✔️ Interface declarada 100% com Kotlin</li>
-  <li>✔️ Composables reutilizáveis e modulares</li>
-  <li>✔️ Navegação com rotas nomeadas</li>
-  <li>✔️ Estado reativo com recomposição automática</li>
-  <li>✔️ Sem necessidade de XML ou <code>findViewById</code></li>
+  <li>🧩 Separe componentes em arquivos reutilizáveis</li>
+  <li>🛠️ Use <code>Modifier</code> como parâmetro padrão</li>
+  <li>🔁 Prefira <code>remember</code> para estados locais</li>
+  <li>🎯 Use <code>ViewModel</code> para lógica de negócio</li>
+  <li>👀 Adicione <code>@Preview</code> para testes visuais</li>
 </ul>
 
 <hr/>
+
+<h2>✅ Conclusão</h2>
+
+<ul>
+  <li>✔️ Interfaces 100% Kotlin</li>
+  <li>✔️ Sem necessidade de XML</li>
+  <li>✔️ Estados e recomposição automáticos</li>
+  <li>✔️ Componentes reutilizáveis e responsivos</li>
+</ul>
+
+<hr/>
+
+<h2>📚 Referências</h2>
+
+<ul>
+  <li><a href="https://developer.android.com/jetpack/compose">Documentação oficial do Jetpack Compose</a></li>
+  <li><a href="https://developer.android.com/jetpack/compose/designsystems/material3">Guia do Material 3</a></li>
+</ul>
