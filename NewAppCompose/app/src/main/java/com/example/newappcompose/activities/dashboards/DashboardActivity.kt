@@ -415,28 +415,36 @@ fun MainScreen() {
 
                             viewModel.loadFiltered(from, to).observeForever { result ->
                                 flights = result // Atualiza lista de voos
-                                val intent =
-                                    Intent(context, SearchResultActivity::class.java).apply {
-                                        putExtra("from", from)
-                                        putExtra("to", to)
-                                        putExtra("numPassenger", adultPassenger + childPassenger)
-                                        putExtra("departureDate", departureDate)
-                                        putExtra("returnDate", returnDate)
-                                        putExtra("class", classes)
-                                        val gson = Gson()
-                                        val flightsJson = gson.toJson(flights)
-                                        putExtra("flightsJson", flightsJson)
-                                        putExtra(
-                                            "fromShort",
-                                            locations.find { it.Name == from }
-                                                ?.let { it.Id.toString() } ?: "")
-                                        putExtra(
-                                            "toShort",
-                                            locations.find { it.Name == to }
-                                                ?.let { it.Id.toString() } ?: "")
-                                    }
-                                context.startActivity(intent) // Navega para a próxima tela
+
+                                if (flights.isEmpty()) {
+                                    Toast.makeText(context, "Não há voos disponíveis para os critérios selecionados.", Toast.LENGTH_SHORT).show()
+                                    return@observeForever
+                                }
+
+                                val intent = Intent(context, SearchResultActivity::class.java).apply {
+                                    putExtra("from", from)
+                                    putExtra("to", to)
+                                    putExtra("numPassenger", adultPassenger + childPassenger)
+                                    putExtra("departureDate", departureDate)
+                                    putExtra("returnDate", returnDate)
+                                    putExtra("class", classes)
+                                    val gson = Gson()
+                                    val flightsJson = gson.toJson(flights)
+                                    putExtra("flightsJson", flightsJson)
+                                    putExtra(
+                                        "fromShort",
+                                        locations.find { it.Name == from }
+                                            ?.let { it.Id.toString() } ?: ""
+                                    )
+                                    putExtra(
+                                        "toShort",
+                                        locations.find { it.Name == to }
+                                            ?.let { it.Id.toString() } ?: ""
+                                    )
+                                }
+                                context.startActivity(intent)
                             }
+
                         },
                         text = "Procurar" // Texto do botão
                     )
