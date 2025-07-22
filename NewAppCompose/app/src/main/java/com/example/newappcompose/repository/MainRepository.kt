@@ -51,7 +51,7 @@ class MainRepository { // Repositório para acessar dados do Firebase
                 for (childSnapshot in snapshot.children) { // Itera sobre filhos
                     val list = childSnapshot.getValue(FlightModel::class.java) // Converte para modelo
                     if (list != null) { // Se não é nulo
-                        if (list.To == to) { // E destino confere
+                        if (list.to == to) { // E destino confere
                             lists.add(list) // Adiciona à lista
                         }
                     }

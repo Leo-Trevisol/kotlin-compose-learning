@@ -3,23 +3,77 @@
     "0": {
       "id": 0,
       "name": "Los Angeles"
+    },
+    "1": {
+      "id": 1,
+      "name": "New York"
+    },
+    "2": {
+      "id": 2,
+      "name": "London"
+    },
+    "3": {
+      "id": 3,
+      "name": "Tokyo"
     }
   },
   "Flights": {
     "0": {
+      "id": 0,
       "airlineLogo": "https://res.cloudinary.com/dikc5yq/image/upload/v174740063/DeltaAirline_cbkxb.png",
       "airlineName": "Delta Airlines",
       "arriveTime": "2h 45m",
       "classSeat": "Business class",
       "date": "24 aug 2024",
-      "from": "NewYork",
+      "from": "New York",
       "fromShort": "JFK",
       "numberSeat": 79,
       "price": 170.6,
       "reservedSeats": "D1,B3,B3,F6,E4,D1,D5,A6,A7,F9,D11",
       "time": "12:54",
       "to": "Los Angeles",
-      "toShort": "LAX"
+      "toShort": "LAX",
+      "flightNumber": "DL1234",
+      "gate": "B12",
+      "status": "On Time"
+    },
+    "1": {
+      "id": 1,
+      "airlineLogo": "https://res.cloudinary.com/dikc5yq/image/upload/v174740064/BritishAirways_cbkxb.png",
+      "airlineName": "British Airways",
+      "arriveTime": "7h 10m",
+      "classSeat": "Economy",
+      "date": "25 aug 2024",
+      "from": "London",
+      "fromShort": "LHR",
+      "numberSeat": 120,
+      "price": 450.0,
+      "reservedSeats": "A1,A2,C5,C6,E10,F12",
+      "time": "09:30",
+      "to": "New York",
+      "toShort": "JFK",
+      "flightNumber": "BA5678",
+      "gate": "C4",
+      "status": "Delayed"
+    },
+    "2": {
+      "id": 2,
+      "airlineLogo": "https://res.cloudinary.com/dikc5yq/image/upload/v174740065/ANA_cbkxb.png",
+      "airlineName": "All Nippon Airways",
+      "arriveTime": "13h 20m",
+      "classSeat": "First class",
+      "date": "26 aug 2024",
+      "from": "Tokyo",
+      "fromShort": "NRT",
+      "numberSeat": 50,
+      "price": 1200.75,
+      "reservedSeats": "A1,B2,C3,D4",
+      "time": "17:00",
+      "to": "Los Angeles",
+      "toShort": "LAX",
+      "flightNumber": "NH9012",
+      "gate": "T1-45",
+      "status": "On Time"
     }
   }
 }

@@ -29,6 +29,7 @@ import com.example.newappcompose.activities.search.SearchResultActivity // Tela 
 import com.example.newappcompose.domain.FlightModel // Modelo de voo
 import com.example.newappcompose.domain.LocationModel // Modelo de localidade
 import com.example.newappcompose.viewmodel.MainViewModel // ViewModel principal
+import com.google.gson.Gson
 import java.text.SimpleDateFormat // Para formatação de data
 import java.util.Date // Para trabalhar com datas
 import java.util.Locale // Para definição de localização da data
@@ -422,7 +423,9 @@ fun MainScreen() {
                                         putExtra("departureDate", departureDate)
                                         putExtra("returnDate", returnDate)
                                         putExtra("class", classes)
-                                        putExtra("flights", ArrayList(flights))
+                                        val gson = Gson()
+                                        val flightsJson = gson.toJson(flights)
+                                        putExtra("flightsJson", flightsJson)
                                         putExtra(
                                             "fromShort",
                                             locations.find { it.Name == from }
