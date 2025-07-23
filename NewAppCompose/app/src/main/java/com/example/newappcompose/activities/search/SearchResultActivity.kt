@@ -79,20 +79,19 @@ fun FlightCardStyled(
             .padding(16.dp)
             .fillMaxWidth()
     ) {
-        // Exibe a logo da companhia aérea
-//        Image(
-//            painter = when (flight.airlineName.lowercase()) {
-//                "delta airlines" -> painterResource(id = R.drawable.logo_delta)
-//                "american airlines" -> painterResource(id = R.drawable.logo_american)
-//                "southwest" -> painterResource(id = R.drawable.logo_southwest)
-//                "united airlines" -> painterResource(id = R.drawable.logo_united)
-//                else -> painterResource(id = R.drawable.ic_airplane)
-//            },
-//            contentDescription = null,
-//            modifier = Modifier
-//                .height(32.dp)
-//                .align(Alignment.CenterHorizontally)
-//        )
+   //      Exibe a logo da companhia aérea
+        Image(
+            painter = when (flight.airlineName.lowercase()) {
+                "delta airlines" -> painterResource(id = R.drawable.logo_delta)
+                "american airlines" -> painterResource(id = R.drawable.logo_american)
+                "british airways" -> painterResource(id = R.drawable.logo_british)
+                else -> painterResource(id = R.drawable.ic_airplane)
+            },
+            contentDescription = null,
+            modifier = Modifier
+                .height(32.dp)
+                .align(Alignment.CenterHorizontally)
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
