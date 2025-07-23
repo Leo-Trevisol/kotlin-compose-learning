@@ -25,7 +25,17 @@ import com.example.newappcompose.domain.FlightModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+
+
 class SearchResultActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,14 +51,39 @@ class SearchResultActivity : ComponentActivity() {
         val flightsList: List<FlightModel> = gson.fromJson(flightsJson, type)
 
         setContent {
-            Scaffold(
-                containerColor = colorResource(id = R.color.pink)
-            ) { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colorResource(id = R.color.pink)) // Fundo igual ao restante
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                // Topo com botão de voltar e título, sem sombra, direto
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    IconButton(onClick = { finish() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = colorResource(id = R.color.white) // ícone branco como na imagem
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Resultado da pesquisa",
+                        color = colorResource(id = R.color.white),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Lista de voos
                 LazyColumn(
-                    contentPadding = padding,
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier
-                        .padding(16.dp)
                         .fillMaxSize()
                 ) {
                     items(flightsList.size) { index ->
@@ -62,6 +97,8 @@ class SearchResultActivity : ComponentActivity() {
                 }
             }
         }
+
+
     }
 }
 
