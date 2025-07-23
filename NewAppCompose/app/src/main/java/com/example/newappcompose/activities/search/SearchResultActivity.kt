@@ -34,8 +34,7 @@ class SearchResultActivity : ComponentActivity() {
         val to = intent.getStringExtra("to") ?: ""
         val departureDate = intent.getStringExtra("departureDate") ?: ""
         val flightClass = intent.getStringExtra("class") ?: ""
-        val fromShort = intent.getStringExtra("fromShort") ?: ""
-        val toShort = intent.getStringExtra("toShort") ?: ""
+
         val gson = Gson()
         val flightsJson = intent.getStringExtra("flightsJson")
         val type = object : TypeToken<List<FlightModel>>() {}.type
@@ -56,8 +55,6 @@ class SearchResultActivity : ComponentActivity() {
                         FlightCardStyled(
                             from = from,
                             to = to,
-                            fromShort = fromShort,
-                            toShort = toShort,
                             departureDate = departureDate,
                             flight = flightsList[index]
                         )
@@ -68,12 +65,11 @@ class SearchResultActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun FlightCardStyled(
     from: String,
     to: String,
-    fromShort: String,
-    toShort: String,
     departureDate: String,
     flight: FlightModel
 ) {
@@ -83,52 +79,82 @@ fun FlightCardStyled(
             .padding(16.dp)
             .fillMaxWidth()
     ) {
+        // Exibe a logo da companhia aérea
+//        Image(
+//            painter = when (flight.airlineName.lowercase()) {
+//                "delta airlines" -> painterResource(id = R.drawable.logo_delta)
+//                "american airlines" -> painterResource(id = R.drawable.logo_american)
+//                "southwest" -> painterResource(id = R.drawable.logo_southwest)
+//                "united airlines" -> painterResource(id = R.drawable.logo_united)
+//                else -> painterResource(id = R.drawable.ic_airplane)
+//            },
+//            contentDescription = null,
+//            modifier = Modifier
+//                .height(32.dp)
+//                .align(Alignment.CenterHorizontally)
+//        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Linha com origem e destino
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = fromShort, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = flight.from, fontSize = 12.sp)
+                Text(text = flight.fromShort, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            }
+
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "20", fontSize = 14.sp)
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = flight.arriveTime, fontSize = 12.sp, color = colorResource(id = R.color.grey))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_airplane),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = toShort, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = flight.to, fontSize = 12.sp)
+                Text(text = flight.toShort, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
+        // Classe e Preço na mesma linha
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = from, fontSize = 12.sp, color = colorResource(id = R.color.grey))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_seat),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = flight.classSeat,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = colorResource(id = R.color.orange)
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
-            Image(
-                painter = painterResource(id = R.drawable.ic_airplane),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp)
+
+            Text(
+                text = "$ " + String.format("%.2f", flight.price),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = to, fontSize = 12.sp, color = colorResource(id = R.color.grey))
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = flight.classSeat, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = colorResource(id = R.color.orange))
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = flight.airlineName, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = "${flight.price}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-        }
     }
 }

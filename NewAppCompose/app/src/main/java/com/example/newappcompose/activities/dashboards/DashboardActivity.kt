@@ -428,20 +428,15 @@ fun MainScreen() {
                                     putExtra("departureDate", departureDate)
                                     putExtra("returnDate", returnDate)
                                     putExtra("class", classes)
+
+                                    // Serializa os voos como JSON
                                     val gson = Gson()
                                     val flightsJson = gson.toJson(flights)
                                     putExtra("flightsJson", flightsJson)
-                                    putExtra(
-                                        "fromShort",
-                                        locations.find { it.Name == from }
-                                            ?.let { it.Id.toString() } ?: ""
-                                    )
-                                    putExtra(
-                                        "toShort",
-                                        locations.find { it.Name == to }
-                                            ?.let { it.Id.toString() } ?: ""
-                                    )
+
+                                    // fromShort e toShort agora são ignorados — estarão no objeto FlightModel
                                 }
+
                                 context.startActivity(intent)
                             }
 
