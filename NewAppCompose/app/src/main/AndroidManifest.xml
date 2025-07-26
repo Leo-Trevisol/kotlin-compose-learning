@@ -13,6 +13,11 @@
         android:theme="@style/Theme.NewAppCompose"
         tools:targetApi="31">
         <activity
+            android:name=".activities.seat.SeatSelectionActivity"
+            android:exported="false"
+            android:label="@string/title_activity_seat_selection"
+            android:theme="@style/Theme.NewAppCompose" />
+        <activity
             android:name=".activities.search.SearchResultActivity"
             android:exported="false"
             android:label="@string/title_activity_search_result"

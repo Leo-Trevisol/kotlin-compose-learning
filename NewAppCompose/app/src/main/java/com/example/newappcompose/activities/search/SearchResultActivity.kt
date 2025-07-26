@@ -1,11 +1,13 @@
 package com.example.newappcompose.activities.search
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +34,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.platform.LocalContext
+import com.example.newappcompose.activities.seat.SeatSelectionActivity
 
 
 class SearchResultActivity : ComponentActivity() {
@@ -110,11 +114,17 @@ fun FlightCardStyled(
     departureDate: String,
     flight: FlightModel
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .background(colorResource(id = R.color.white), shape = RoundedCornerShape(16.dp))
             .padding(16.dp)
             .fillMaxWidth()
+            .clickable {
+                val intent = Intent(context, SeatSelectionActivity::class.java)
+                context.startActivity(intent)
+            }
     ) {
    //      Exibe a logo da companhia aérea
         Image(
