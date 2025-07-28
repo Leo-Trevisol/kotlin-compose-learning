@@ -122,7 +122,12 @@ fun FlightCardStyled(
             .padding(16.dp)
             .fillMaxWidth()
             .clickable {
-                val intent = Intent(context, SeatSelectionActivity::class.java)
+                val intent = Intent(context, SeatSelectionActivity::class.java).apply {
+                    putExtra("flight", Gson().toJson(flight)) // Passa o voo como JSON
+                    putExtra("from", from)
+                    putExtra("to", to)
+                    putExtra("departureDate", departureDate)
+                }
                 context.startActivity(intent)
             }
     ) {
