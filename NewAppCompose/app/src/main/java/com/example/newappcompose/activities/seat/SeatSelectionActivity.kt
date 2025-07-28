@@ -76,8 +76,33 @@ fun SeatSelectionScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        Box(
+            modifier = Modifier
+                .width(180.dp)
+                .height(40.dp)
+                .background(
+                    color = Color.White.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Frente do avião ✈️",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         // Assentos (como já está no seu código)
         cols.forEach { col ->
+            // Adiciona espaçamento entre colunas 5 e 6
+            if (col == 6) {
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             Row(horizontalArrangement = Arrangement.Center) {
                 rows.forEachIndexed { index, row ->
                     val seatId = "$row$col"
