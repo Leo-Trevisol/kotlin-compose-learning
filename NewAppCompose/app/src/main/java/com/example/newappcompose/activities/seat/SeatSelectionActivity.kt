@@ -1,5 +1,7 @@
+// Pacote da activity de seleção de assentos
 package com.example.newappcompose.activities.seat
 
+// Importações necessárias do Android e Compose
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
@@ -21,130 +23,134 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newappcompose.R
-import com.example.newappcompose.activities.dashboards.GradientButton
+import com.example.newappcompose.activities.dashboards.GradientButton // Botão customizado com gradiente
 
+// Activity principal para seleção de assentos
 class SeatSelectionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Define o conteúdo da activity usando Jetpack Compose
         setContent {
             SeatSelectionScreen()
         }
     }
 }
 
-@SuppressLint("ContextCastToActivity")
+@SuppressLint("ContextCastToActivity") // Suprime aviso de cast do contexto
 @Composable
 fun SeatSelectionScreen() {
-    val rows = ('A'..'F')
-    val cols = (1..10)
-    val selectedSeats = remember { mutableStateListOf<String>() }
-    val unavailableSeats = listOf("C6", "D6", "E6")
-    val activity = LocalContext.current as? Activity
+    val rows = ('A'..'F') // Linhas de assentos (A até F)
+    val cols = (1..10) // Colunas de assentos (1 até 10)
+    val selectedSeats = remember { mutableStateListOf<String>() } // Lista reativa de assentos selecionados
+    val unavailableSeats = listOf("C6", "D6", "E6") // Assentos indisponíveis
+    val activity = LocalContext.current as? Activity // Referência à activity atual
 
+    // Layout em coluna para organizar a tela
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF38B6FF))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize() // Ocupa toda a tela
+            .background(Color(0xFF38B6FF)) // Cor de fundo azul clara
+            .padding(16.dp), // Espaçamento interno
+        horizontalAlignment = Alignment.CenterHorizontally // Alinhamento central horizontal
     ) {
-        // Botão de voltar no topo
+        // Linha com botão de voltar e título
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            verticalAlignment = Alignment.CenterVertically, // Alinhamento vertical ao centro
+            modifier = Modifier.fillMaxWidth() // Ocupa largura total
         ) {
-            IconButton(onClick = { activity?.finish() }) {
+            IconButton(onClick = { activity?.finish() }) { // Botão de voltar que finaliza a activity
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Voltar",
-                    tint = Color.White
+                    imageVector = Icons.Default.ArrowBack, // Ícone de seta para voltar
+                    contentDescription = "Voltar", // Descrição acessível
+                    tint = Color.White // Cor branca
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8.dp)) // Espaço entre o botão e o texto
             Text(
-                text = "Selecionar assentos",
+                text = "Selecionar assentos", // Título da tela
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp)) // Espaço vertical
 
+        // Subtítulo
         Text("Escolha os assentos", fontSize = 20.sp, color = Color.White)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp)) // Espaço vertical
 
-        // Assentos (como já está no seu código)
+        // Loop para gerar colunas de assentos (1 até 10)
         cols.forEach { col ->
-            Row(horizontalArrangement = Arrangement.Center) {
-                rows.forEachIndexed { index, row ->
-                    val seatId = "$row$col"
-                    val isSelected = seatId in selectedSeats
-                    val isUnavailable = seatId in unavailableSeats
+            Row(horizontalArrangement = Arrangement.Center) { // Cada linha representa uma coluna
+                rows.forEachIndexed { index, row -> // Percorre as letras (linhas)
+                    val seatId = "$row$col" // Ex: A1, B2, etc.
+                    val isSelected = seatId in selectedSeats // Verifica se está selecionado
+                    val isUnavailable = seatId in unavailableSeats // Verifica se está indisponível
 
                     if (index == 3) {
-                        Spacer(modifier = Modifier.width(16.dp)) // Corredor
+                        Spacer(modifier = Modifier.width(16.dp)) // Adiciona espaço para simular corredor entre bancos
                     }
 
+                    // Caixa que representa cada assento
                     Box(
                         modifier = Modifier
-                            .padding(4.dp)
-                            .size(40.dp)
+                            .padding(4.dp) // Espaçamento ao redor
+                            .size(40.dp) // Tamanho do quadrado
                             .background(
-                                when {
-                                    isUnavailable -> Color.LightGray
-                                    isSelected -> Color.Yellow
-                                    else -> Color.Green
+                                when { // Define cor com base no estado do assento
+                                    isUnavailable -> Color.LightGray // Cinza se indisponível
+                                    isSelected -> Color.Yellow // Amarelo se selecionado
+                                    else -> Color.Green // Verde se disponível
                                 },
-                                shape = RoundedCornerShape(4.dp)
+                                shape = RoundedCornerShape(4.dp) // Cantos arredondados
                             )
-                            .clickable(enabled = !isUnavailable) {
-                                if (isSelected) selectedSeats.remove(seatId)
-                                else selectedSeats.add(seatId)
+                            .clickable(enabled = !isUnavailable) { // Só permite clique se estiver disponível
+                                if (isSelected) selectedSeats.remove(seatId) // Remove se já estava selecionado
+                                else selectedSeats.add(seatId) // Adiciona se ainda não estava
                             },
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center // Centraliza o texto
                     ) {
-                        Text(text = seatId, fontSize = 12.sp, color = Color.Black)
+                        Text(text = seatId, fontSize = 12.sp, color = Color.Black) // Exibe o ID do assento
                     }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp)) // Espaço entre os assentos e a legenda
 
-        // Legenda
+        // Linha com legenda das cores
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            LegendBox(Color.Green, "Disponível")
-            LegendBox(Color.Yellow, "Selecionado")
-            LegendBox(Color.LightGray, "Indisponível")
+            LegendBox(Color.Green, "Disponível") // Verde = disponível
+            LegendBox(Color.Yellow, "Selecionado") // Amarelo = selecionado
+            LegendBox(Color.LightGray, "Indisponível") // Cinza = indisponível
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp)) // Espaço entre legenda e botão
 
-        // Botão com gradiente
+        // Botão para confirmar seleção dos assentos
         GradientButton(
             onClick = {
                 // salvar seleção ou enviar resultado
             },
-            text = "Confirmar assentos",
-            padding = 0
+            text = "Confirmar assentos", // Texto do botão
+            padding = 0 // Sem padding adicional
         )
     }
 }
 
-
+// Composable que exibe uma cor com um texto ao lado, usado para legenda
 @Composable
 fun LegendBox(color: Color, label: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically) { // Alinha verticalmente
         Box(
             modifier = Modifier
-                .size(16.dp)
-                .background(color, shape = RoundedCornerShape(4.dp))
+                .size(16.dp) // Tamanho do quadrado
+                .background(color, shape = RoundedCornerShape(4.dp)) // Cor e bordas
         )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(label, color = Color.White, fontSize = 12.sp)
+        Spacer(modifier = Modifier.width(4.dp)) // Espaço entre cor e texto
+        Text(label, color = Color.White, fontSize = 12.sp) // Texto da legenda
     }
 }
-
